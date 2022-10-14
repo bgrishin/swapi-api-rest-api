@@ -2,9 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Film } from './film.entity';
+import { Planet } from './planet.entity';
+import { Specie } from './specie.entity';
+import { Starship } from './starship.entity';
+import { Vehicle } from './vehicle.entity';
 
 @Entity()
 export class People {
@@ -32,10 +39,25 @@ export class People {
   @Column()
   gender: string;
 
-  @Column()
-  homeworld: string;
+  @ManyToMany((type) => Planet, (planet) => planet.residents)
+  @JoinTable()
+  homeworld: Planet;
 
-  //films & species & vehicles & starships
+  @ManyToMany((type) => Film, (film) => film.characters)
+  @JoinTable()
+  films: Film[];
+
+  @ManyToMany((type) => Specie, (specie) => specie.people)
+  @JoinTable()
+  species: Specie[];
+
+  @ManyToMany((type) => Vehicle, (vehicle) => vehicle.pilots)
+  @JoinTable()
+  vehicles: Vehicle[];
+
+  @ManyToMany((type) => Starship, (vehicle) => vehicle.pilots)
+  @JoinTable()
+  starships: Starship[];
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Film } from './film.entity';
+import { People } from './people.entity';
 
 @Entity()
 export class Starship {
@@ -41,7 +49,12 @@ export class Starship {
   @Column()
   starship_class: string;
 
-  //people & films
+  @ManyToMany((type) => People, (people) => people.vehicles)
+  pilots: People[];
+
+  @ManyToMany((type) => Film, (film) => film.starships)
+  films: Film[];
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

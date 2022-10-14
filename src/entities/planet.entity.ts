@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Film } from './film.entity';
+import { People } from './people.entity';
 
 @Entity()
 export class Planet {
@@ -38,7 +41,11 @@ export class Planet {
   @Column()
   popuplation: number;
 
-  //people & films
+  @ManyToMany((type) => People, (people) => people.homeworld)
+  residents: People[];
+
+  @ManyToMany((type) => Film, (film) => film.planets)
+  films: Film[];
 
   @CreateDateColumn({
     type: 'timestamp',

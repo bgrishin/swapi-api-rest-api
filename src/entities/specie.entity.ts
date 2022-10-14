@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Film } from './film.entity';
+import { People } from './people.entity';
 
 @Entity()
 export class Specie {
@@ -32,7 +40,11 @@ export class Specie {
   @Column()
   language: string;
 
-  //people & films
+  @ManyToMany((type) => People, (people) => people.species)
+  people: People[];
+
+  @ManyToMany((type) => Film, (film) => film.species)
+  films: Film[];
 
   @CreateDateColumn({
     type: 'timestamp',
