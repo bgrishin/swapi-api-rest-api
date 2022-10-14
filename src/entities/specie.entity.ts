@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToMany,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Film } from './film.entity';
@@ -10,6 +11,9 @@ import { People } from './people.entity';
 
 @Entity()
 export class Specie {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column()
   name: string;
 
