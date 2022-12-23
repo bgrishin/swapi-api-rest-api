@@ -1,77 +1,81 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
-import { Film } from './film.entity';
+import { EntityInterface } from '../../utils/entity.interface';
+import { Films } from './film.entity';
 import { Planet } from './planet.entity';
-import { Specie } from './specie.entity';
-import { Starship } from './starship.entity';
-import { Vehicle } from './vehicle.entity';
+import { Species } from './specie.entity';
+import { Starships } from './starship.entity';
+import { Vehicles } from './vehicle.entity';
 
 @Entity()
-export class People {
+export class People implements EntityInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column()
-  height: number;
-
-  @Column()
-  hair_color: string;
-
-  @Column()
-  skin_color: string;
-
-  @Column()
-  eye_color: string;
-
-  @Column()
-  birth_year: number;
+  @Column({ name: 'birth_year' })
+  birthYear: string;
 
   @Column()
   gender: string;
 
-  @ManyToMany((type) => Planet, (planet) => planet.residents)
-  @JoinTable()
+  @Column({ type: 'double' })
+  height: string;
+
+  @Column({ type: 'double' })
+  mass: string;
+
+  @Column({ name: 'eye_color' })
+  eyeColor: string;
+
+  @Column({ name: 'hair_color' })
+  hairColor: string;
+
+  @Column({ name: 'skin_color' })
+  skinColor: string;
+
+  @ManyToOne(() => Planet, (planet) => planet.residents, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'homeworld_id' })
   homeworld: Planet;
 
-  @ManyToMany((type) => Film, (film) => film.characters)
-  @JoinTable()
-  films: Film[];
+  @ManyToMany(() => Films, (film) => film.characters)
+  films: Films[];
 
-  @ManyToMany((type) => Specie, (specie) => specie.people)
-  @JoinTable()
-  species: Specie[];
+  @ManyToMany(() => Starships, (starship) => starship.pilots, { eager: true })
+  starships: Starships[];
 
-  @ManyToMany((type) => Vehicle, (vehicle) => vehicle.pilots)
-  @JoinTable()
-  vehicles: Vehicle[];
+  @ManyToMany(() => Vehicles, (vehicle) => vehicle.pilots, { eager: true })
+  vehicles: Vehicles[];
 
-  @ManyToMany((type) => Starship, (vehicle) => vehicle.pilots)
-  @JoinTable()
-  starships: Starship[];
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
+  @ManyToMany(() => Species, (species) => species.people, { eager: true })
+  @JoinTable({
+    joinColumn: { name: 'person_id' },
+    inverseJoinColumn: { name: 'species_id' },
   })
-  created: string;
+  species: Species[];
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  edited: string;
-
-  @Column()
-  url: string;
+  // @ManyToMany(() => PublicImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'person_id' },
+  //   inverseJoinColumn: { name: 'public_image_id' },
+  // })
+  // publicImages: PublicImage[];
+  //
+  // @ManyToMany(() => FileImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'person_id' },
+  //   inverseJoinColumn: { name: 'file_image_id' },
+  // })
+  // fileImages: FileImage[];
 }

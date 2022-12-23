@@ -1,31 +1,30 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
+import { EntityInterface } from '../../utils/entity.interface';
 import { People } from './people.entity';
 import { Planet } from './planet.entity';
-import { Specie } from './specie.entity';
-import { Starship } from './starship.entity';
-import { Vehicle } from './vehicle.entity';
+import { Species } from './specie.entity';
+import { Starships } from './starship.entity';
+import { Vehicles } from './vehicle.entity';
 
 @Entity()
-export class Film {
+export class Films implements EntityInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   title: string;
 
-  @Column()
-  episode_id: number;
+  @Column({ name: 'episode_id', type: 'int' })
+  episodeId: number;
 
-  @Column()
-  opening_crawl: string;
+  @Column({ name: 'opening_crawl' })
+  openingCrawl: string;
 
   @Column()
   director: string;
@@ -33,41 +32,55 @@ export class Film {
   @Column()
   producer: string;
 
-  @Column()
-  release_date: string;
+  @Column({ name: 'release_date' })
+  releaseDate: number;
 
-  @ManyToMany((type) => People, (people) => people.films)
+  @ManyToMany(() => People, (character) => character.films, { eager: true })
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'character_id' },
+  })
   characters: People[];
 
-  @ManyToMany((type) => Planet, (planet) => planet.films)
-  @JoinTable()
+  @ManyToMany(() => Planet, (planet) => planet.films, { eager: true })
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'planet_id' },
+  })
   planets: Planet[];
 
-  @ManyToMany((type) => Starship, (starship) => starship.films)
-  @JoinTable()
-  starships: Starship[];
-
-  @ManyToMany((type) => Vehicle, (starship) => starship.films)
-  @JoinTable()
-  vehicles: Vehicle[];
-
-  @ManyToMany((type) => Specie, (specie) => specie.films)
-  @JoinTable()
-  species: Specie[];
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
+  @ManyToMany(() => Starships, (starship) => starship.films, { eager: true })
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'starship_id' },
   })
-  created: string;
+  starships: Starships[];
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  @ManyToMany(() => Vehicles, (vehicle) => vehicle.films, { eager: true })
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'vehicle_id' },
   })
-  edited: string;
+  vehicles: Vehicles[];
 
-  @Column()
-  url: string;
+  @ManyToMany(() => Species, (species) => species.films, { eager: true })
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'species_id' },
+  })
+  species: Species[];
+
+  // @ManyToMany(() => PublicImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'film_id' },
+  //   inverseJoinColumn: { name: 'public_image_id' },
+  // })
+  // publicImages: PublicImage[];
+  //
+  // @ManyToMany(() => FileImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'film_id' },
+  //   inverseJoinColumn: { name: 'file_image_id' },
+  // })
+  // fileImages: FileImage[];
 }

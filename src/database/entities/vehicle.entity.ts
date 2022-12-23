@@ -1,16 +1,16 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
-import { Film } from './film.entity';
+import { EntityInterface } from '../../utils/entity.interface';
+import { Films } from './film.entity';
 import { People } from './people.entity';
 
 @Entity()
-export class Vehicle {
+export class Vehicles implements EntityInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,52 +20,54 @@ export class Vehicle {
   @Column()
   model: string;
 
+  @Column({ name: 'vehicle_class' })
+  vehicleClass: string;
+
   @Column()
   manufacturer: string;
 
   @Column()
-  cost_in_credits: number;
+  length: string;
 
-  @Column()
-  length: number;
-
-  @Column()
-  max_atmosphering_speed: number;
+  @Column({ name: 'cost_in_credits' })
+  costInCredits: string;
 
   @Column()
   crew: string;
 
   @Column()
-  passengers: number;
+  passengers: string;
 
-  @Column()
-  cargo_capacity: number;
+  @Column({ name: 'max_atmospering_speed' })
+  maxAtmospheringSpeed: string;
+
+  @Column({ name: 'cargo_capacity' })
+  cargoCapacity: string;
 
   @Column()
   consumables: string;
 
-  @Column()
-  vehicle_class: string;
+  @ManyToMany(() => Films, (film) => film.vehicles)
+  films: Films[];
 
-  @ManyToMany((type) => People, (people) => people.vehicles)
+  @ManyToMany(() => People, (pilot) => pilot.vehicles)
+  @JoinTable({
+    joinColumn: { name: 'vehicle_id' },
+    inverseJoinColumn: { name: 'pilot_id' },
+  })
   pilots: People[];
 
-  @ManyToMany((type) => Film, (film) => film.vehicles)
-  films: Film[];
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  created: string;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  edited: string;
-
-  @Column()
-  url: string;
+  // @ManyToMany(() => PublicImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'vehicle_id' },
+  //   inverseJoinColumn: { name: 'public_image_id' },
+  // })
+  // publicImages: PublicImage[];
+  //
+  // @ManyToMany(() => FileImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'vehicle_id' },
+  //   inverseJoinColumn: { name: 'file_image_id' },
+  // })
+  // fileImages: FileImage[];
 }

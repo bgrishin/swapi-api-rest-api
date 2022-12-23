@@ -1,16 +1,18 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
-import { Film } from './film.entity';
+import { EntityInterface } from '../../utils/entity.interface';
+import { Films } from './film.entity';
 import { People } from './people.entity';
+import { Planet } from './planet.entity';
 
 @Entity()
-export class Specie {
+export class Species implements EntityInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,46 +25,42 @@ export class Specie {
   @Column()
   designation: string;
 
-  @Column()
-  avarage_height: number;
+  @Column({ name: 'average_height' })
+  averageHeight: string;
 
-  @Column()
-  skin_colors: string;
+  @Column({ name: 'average_lifespan' })
+  averageLifespan: string;
 
-  @Column()
-  hair_colors: string;
+  @Column({ name: 'eye_colors' })
+  eyeColors: string;
 
-  @Column()
-  eye_colors: string;
-
-  @Column()
-  avarage_lifespan: number;
-
-  @Column()
-  homeworld: string;
+  @Column({ name: 'hair_colors' })
+  hairColors: string;
 
   @Column()
   language: string;
 
-  @ManyToMany((type) => People, (people) => people.species)
+  @ManyToOne(() => Planet, (planet) => planet.species, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'homeworld_id' })
+  homeworld: Planet;
+
+  @ManyToMany(() => People, (person) => person.species)
   people: People[];
 
-  @ManyToMany((type) => Film, (film) => film.species)
-  films: Film[];
+  @ManyToMany(() => Films, (film) => film.species)
+  films: Films[];
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  created: string;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  edited: string;
-
-  @Column()
-  url: string;
+  // @ManyToMany(() => PublicImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'species_id' },
+  //   inverseJoinColumn: { name: 'public_image_id' },
+  // })
+  // publicImages: PublicImage[];
+  //
+  // @ManyToMany(() => FileImage)
+  // @JoinTable({
+  //   joinColumn: { name: 'species_id' },
+  //   inverseJoinColumn: { name: 'file_image_id' },
+  // })
+  // fileImages: FileImage[];
 }
