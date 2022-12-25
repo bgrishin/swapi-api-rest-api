@@ -1,18 +1,12 @@
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { EntityInterface } from '../../utils/entity.interface';
+import { Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm';
+import { EntityInterface } from '../../interfaces/entity.interface';
 import { Films } from './film.entity';
 import { People } from './people.entity';
 import { Species } from './specie.entity';
 
 @Entity()
 export class Planet implements EntityInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
@@ -21,11 +15,11 @@ export class Planet implements EntityInterface {
   @Column()
   diameter: string;
 
-  @Column({ name: 'rotation_period' })
-  rotationPeriod: string;
+  @Column()
+  rotation_period: string;
 
-  @Column({ name: 'orbital_period' })
-  orbitalPeriod: string;
+  @Column()
+  orbital_period: string;
 
   @Column()
   gravity: string;
@@ -39,8 +33,8 @@ export class Planet implements EntityInterface {
   @Column()
   terrain: string;
 
-  @Column({ name: 'surface_water' })
-  surfaceWater: string;
+  @Column()
+  surface_water: string;
 
   @OneToMany(() => People, (people) => people.homeworld, { eager: true })
   residents: People[];

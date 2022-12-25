@@ -5,9 +5,9 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
-import { EntityInterface } from '../../utils/entity.interface';
+import { EntityInterface } from '../../interfaces/entity.interface';
 import { Films } from './film.entity';
 import { Planet } from './planet.entity';
 import { Species } from './specie.entity';
@@ -16,32 +16,32 @@ import { Vehicles } from './vehicle.entity';
 
 @Entity()
 export class People implements EntityInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ name: 'birth_year' })
-  birthYear: string;
+  @Column()
+  birth_year: string;
 
   @Column()
   gender: string;
 
-  @Column({ type: 'double' })
+  @Column()
   height: string;
 
-  @Column({ type: 'double' })
+  @Column()
   mass: string;
 
-  @Column({ name: 'eye_color' })
-  eyeColor: string;
+  @Column()
+  eye_color: string;
 
-  @Column({ name: 'hair_color' })
-  hairColor: string;
+  @Column()
+  hair_color: string;
 
-  @Column({ name: 'skin_color' })
-  skinColor: string;
+  @Column()
+  skin_color: string;
 
   @ManyToOne(() => Planet, (planet) => planet.residents, {
     onDelete: 'SET NULL',

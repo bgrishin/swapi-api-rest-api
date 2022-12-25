@@ -1,17 +1,11 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { EntityInterface } from '../../utils/entity.interface';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { EntityInterface } from '../../interfaces/entity.interface';
 import { Films } from './film.entity';
 import { People } from './people.entity';
 
 @Entity()
 export class Vehicles implements EntityInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
@@ -20,8 +14,8 @@ export class Vehicles implements EntityInterface {
   @Column()
   model: string;
 
-  @Column({ name: 'vehicle_class' })
-  vehicleClass: string;
+  @Column()
+  vehicle_class: string;
 
   @Column()
   manufacturer: string;
@@ -29,8 +23,8 @@ export class Vehicles implements EntityInterface {
   @Column()
   length: string;
 
-  @Column({ name: 'cost_in_credits' })
-  costInCredits: string;
+  @Column()
+  cost_in_credits: string;
 
   @Column()
   crew: string;
@@ -38,11 +32,11 @@ export class Vehicles implements EntityInterface {
   @Column()
   passengers: string;
 
-  @Column({ name: 'max_atmospering_speed' })
-  maxAtmospheringSpeed: string;
+  @Column()
+  max_atmosphering_speed: string;
 
-  @Column({ name: 'cargo_capacity' })
-  cargoCapacity: string;
+  @Column()
+  cargo_capacity: string;
 
   @Column()
   consumables: string;

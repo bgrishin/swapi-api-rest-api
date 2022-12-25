@@ -4,16 +4,16 @@ import {
   JoinColumn,
   ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
-import { EntityInterface } from '../../utils/entity.interface';
+import { EntityInterface } from '../../interfaces/entity.interface';
 import { Films } from './film.entity';
 import { People } from './people.entity';
 import { Planet } from './planet.entity';
 
 @Entity()
 export class Species implements EntityInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
@@ -25,17 +25,17 @@ export class Species implements EntityInterface {
   @Column()
   designation: string;
 
-  @Column({ name: 'average_height' })
-  averageHeight: string;
+  @Column()
+  average_height: string;
 
-  @Column({ name: 'average_lifespan' })
-  averageLifespan: string;
+  @Column()
+  average_lifespan: string;
 
-  @Column({ name: 'eye_colors' })
-  eyeColors: string;
+  @Column()
+  eye_colors: string;
 
-  @Column({ name: 'hair_colors' })
-  hairColors: string;
+  @Column()
+  hair_colors: string;
 
   @Column()
   language: string;

@@ -1,17 +1,11 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { EntityInterface } from '../../utils/entity.interface';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { EntityInterface } from '../../interfaces/entity.interface';
 import { Films } from './film.entity';
 import { People } from './people.entity';
 
 @Entity()
 export class Starships implements EntityInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
@@ -20,14 +14,14 @@ export class Starships implements EntityInterface {
   @Column()
   model: string;
 
-  @Column({ name: 'starship_class' })
-  starshipClass: string;
+  @Column()
+  starship_class: string;
 
   @Column()
   manufacturer: string;
 
-  @Column({ name: 'cost_in_credits' })
-  costInCredits: string;
+  @Column()
+  cost_in_credits: string;
 
   @Column()
   length: string;
@@ -38,17 +32,17 @@ export class Starships implements EntityInterface {
   @Column()
   passengers: string;
 
-  @Column({ type: 'double', name: 'max_atmosphering_speed' })
-  maxAtmospheringSpeed: string;
+  @Column()
+  max_atmosphering_speed: string;
 
   @Column()
-  mglt: string;
+  MGLT: string;
 
-  @Column({ name: 'hyperdrive_rating' })
-  hyperdriveRating: string;
+  @Column()
+  hyperdrive_rating: string;
 
-  @Column({ name: 'cargo_capacity' })
-  cargoCapacity: string;
+  @Column()
+  cargo_capacity: string;
 
   @Column()
   consumables: string;

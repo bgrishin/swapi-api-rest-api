@@ -1,11 +1,5 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { EntityInterface } from '../../utils/entity.interface';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { EntityInterface } from '../../interfaces/entity.interface';
 import { People } from './people.entity';
 import { Planet } from './planet.entity';
 import { Species } from './specie.entity';
@@ -14,17 +8,17 @@ import { Vehicles } from './vehicle.entity';
 
 @Entity()
 export class Films implements EntityInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
   title: string;
 
-  @Column({ name: 'episode_id', type: 'int' })
-  episodeId: number;
+  @Column()
+  episode_id: number;
 
-  @Column({ name: 'opening_crawl' })
-  openingCrawl: string;
+  @Column()
+  opening_crawl: string;
 
   @Column()
   director: string;
@@ -32,8 +26,8 @@ export class Films implements EntityInterface {
   @Column()
   producer: string;
 
-  @Column({ name: 'release_date' })
-  releaseDate: number;
+  @Column()
+  release_date: string;
 
   @ManyToMany(() => People, (character) => character.films, { eager: true })
   @JoinTable({

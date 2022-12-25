@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { EntityInterface } from '../../utils/entity.interface';
+import { EntityInterface } from '../../interfaces/entity.interface';
 
 @Entity()
 export class FileImage implements EntityInterface {
