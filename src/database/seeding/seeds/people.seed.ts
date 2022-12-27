@@ -26,27 +26,6 @@ export default class PeopleSeed implements Seeder {
         )
         .execute();
 
-      // await Promise.all(
-      //   data.map(async (people) => {
-      //     const id = +people.url.split('/')[5];
-      //     const homeworldId = +people.homeworld.split('/')[5];
-      //     const speciesIds = getIds(people.species);
-      //
-      //     await connection
-      //       .createQueryBuilder()
-      //       .relation(People, 'homeworld')
-      //       .of(id)
-      //       .set(homeworldId);
-      //     speciesIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(People, 'species')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //   }),
-      // );
-
       if (res.next) {
         return iteration(res.next);
       }

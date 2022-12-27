@@ -28,20 +28,6 @@ export default class StarshipsSeed implements Seeder {
         )
         .execute();
 
-      // await Promise.all(
-      //   data.map(async (starship) => {
-      //     const id = +starship.url.split('/')[5];
-      //     const pilotsIds = getIds(starship.pilots);
-      //     pilotsIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(Starships, 'pilots')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //   }),
-      // );
-
       if (res.next) {
         return iteration(res.next);
       }

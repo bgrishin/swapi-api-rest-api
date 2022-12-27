@@ -29,20 +29,6 @@ export default class VehiclesSeed implements Seeder {
         )
         .execute();
 
-      // await Promise.all(
-      //   data.map(async (vehicle) => {
-      //     const id = +vehicle.url.split('/')[5];
-      //     const pilotsIds = getIds(vehicle.pilots);
-      //     pilotsIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(Vehicles, 'pilots')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //   }),
-      // );
-
       if (res.next) {
         return iteration(res.next);
       }

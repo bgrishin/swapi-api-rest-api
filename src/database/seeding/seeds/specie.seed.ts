@@ -27,18 +27,6 @@ export default class SpeciesSeed implements Seeder {
         )
         .execute();
 
-      // await Promise.all(
-      //   data.map(async (specie) => {
-      //     const id = +specie.url.split('/')[5];
-      //     const homeworldId = +specie.homeworld.split('/')[5];
-      //     await connection
-      //       .createQueryBuilder()
-      //       .relation(Species, 'homeworld')
-      //       .of(id)
-      //       .set(homeworldId);
-      //   }),
-      // );
-
       if (res.next) {
         return iteration(res.next);
       }

@@ -27,51 +27,6 @@ export default class FilmsSeeder implements Seeder {
         )
         .execute();
 
-      // await Promise.all(
-      //   data.map(async (film) => {
-      //     const id = +film.url.split('/')[5];
-      //     const charactersIds = getIds(film.characters),
-      //       planetsIds = getIds(film.planets),
-      //       starshipsIds = getIds(film.starships),
-      //       vehiclesIds = getIds(film.vehicles),
-      //       speciesIds = getIds(film.species);
-      //     charactersIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(Films, 'characters')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //     planetsIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(Films, 'planets')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //     starshipsIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(Films, 'starships')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //     vehiclesIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(Films, 'vehicles')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //     speciesIds.map(async (x) => {
-      //       await connection
-      //         .createQueryBuilder()
-      //         .relation(Films, 'species')
-      //         .of(id)
-      //         .add(x);
-      //     });
-      //   }),
-      // );
       if (res.next) {
         return iteration(res.next);
       }
