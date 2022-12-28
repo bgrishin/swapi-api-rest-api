@@ -16,7 +16,7 @@ const truncateTable = async (queryRunner: QueryRunner, tableName: string) => {
   const queryRunner = TypeormDatasource.createQueryRunner();
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   console.log(
-    "\x1b[31m\x1b[5mATTENTION! \x1b[0mThis process will destroy all data in your database. Please make sure that you're ready for destructing all data. Process will be started in 10 seconds, to cancel it press \x1b[32mCtrl + C.\x1b[0m",
+    "\x1b[31m\x1b[5mATTENTION! \x1b[0mThis process will destroy all swapi in your database. Please make sure that you're ready for destructing all swapi. Process will be started in 10 seconds, to cancel it press \x1b[32mCtrl + C.\x1b[0m",
   );
   await sleep(10000);
   console.log('Truncating started.');

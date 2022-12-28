@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
 
-import { Films } from '../../entities/film.entity';
+import { Films } from '../../../swapi/films/film.entity';
 import { RelationsBuilder } from '../relationsBuilder';
 
 @Injectable()

@@ -1,13 +1,12 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
-import { EntityInterface } from '../../interfaces/entity.interface';
-import { People } from './people.entity';
-import { Planet } from './planet.entity';
-import { Species } from './specie.entity';
-import { Starships } from './starship.entity';
-import { Vehicles } from './vehicle.entity';
+import { People } from '../people/people.entity';
+import { Planet } from '../planets/planet.entity';
+import { Species } from '../species/specie.entity';
+import { Starships } from '../starships/starship.entity';
+import { Vehicles } from '../vehicles/vehicle.entity';
 
 @Entity()
-export class Films implements EntityInterface {
+export class Films {
   @PrimaryColumn()
   id: number;
 

@@ -6,13 +6,12 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { EntityInterface } from '../../interfaces/entity.interface';
-import { Films } from './film.entity';
-import { People } from './people.entity';
-import { Planet } from './planet.entity';
+import { Films } from '../films/film.entity';
+import { People } from '../people/people.entity';
+import { Planet } from '../planets/planet.entity';
 
 @Entity()
-export class Species implements EntityInterface {
+export class Species {
   @PrimaryColumn()
   id: number;
 

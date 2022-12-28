@@ -1,11 +1,11 @@
 import { Connection } from 'typeorm';
-import { AllSwapiDataInterface } from '../../interfaces/relations.ids.interface';
+import { AllSwapiDataInterface } from '../../common/interfaces/relations.ids.interface';
+import { Films } from '../../swapi/films/film.entity';
+import { People } from '../../swapi/people/people.entity';
+import { Species } from '../../swapi/species/specie.entity';
+import { Starships } from '../../swapi/starships/starship.entity';
+import { Vehicles } from '../../swapi/vehicles/vehicle.entity';
 import { getIds } from '../../utils/seeding.utils';
-import { Films } from '../entities/film.entity';
-import { People } from '../entities/people.entity';
-import { Species } from '../entities/specie.entity';
-import { Starships } from '../entities/starship.entity';
-import { Vehicles } from '../entities/vehicle.entity';
 
 export class RelationsBuilder {
   public static dataObj: AllSwapiDataInterface = {

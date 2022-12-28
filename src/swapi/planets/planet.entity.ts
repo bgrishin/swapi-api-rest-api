@@ -1,11 +1,10 @@
 import { Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm';
-import { EntityInterface } from '../../interfaces/entity.interface';
-import { Films } from './film.entity';
-import { People } from './people.entity';
-import { Species } from './specie.entity';
+import { Films } from '../films/film.entity';
+import { People } from '../people/people.entity';
+import { Species } from '../species/specie.entity';
 
 @Entity()
-export class Planet implements EntityInterface {
+export class Planet {
   @PrimaryColumn()
   id: number;
 

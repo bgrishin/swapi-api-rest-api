@@ -1,8 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { EntityInterface } from '../../interfaces/entity.interface';
 
 @Entity()
-export class FileImage implements EntityInterface {
+export class FileImage {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -11,7 +10,7 @@ export class FileImage implements EntityInterface {
 }
 
 @Entity()
-export class PublicImage implements EntityInterface {
+export class PublicImage {
   @PrimaryGeneratedColumn()
   id: number;
 

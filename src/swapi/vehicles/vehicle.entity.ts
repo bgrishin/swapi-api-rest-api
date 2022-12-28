@@ -1,10 +1,9 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
-import { EntityInterface } from '../../interfaces/entity.interface';
-import { Films } from './film.entity';
-import { People } from './people.entity';
+import { Films } from '../films/film.entity';
+import { People } from '../people/people.entity';
 
 @Entity()
-export class Vehicles implements EntityInterface {
+export class Vehicles {
   @PrimaryColumn()
   id: number;
 

@@ -4,7 +4,7 @@ import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
 import { Roles } from '../../../auth/roles/role.types';
 
-import { Users } from '../../entities/user.entity';
+import { Users } from '../../../swapi/users/user.entity';
 
 @Injectable()
 export default class FilmsSeeder implements Seeder {
