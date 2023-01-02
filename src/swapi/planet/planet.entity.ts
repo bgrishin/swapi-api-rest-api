@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm';
-import { Films } from '../films/film.entity';
+import { Films } from '../film/film.entity';
 import { People } from '../people/people.entity';
-import { Species } from '../species/specie.entity';
+import { Species } from '../specie/specie.entity';
 
 @Entity()
 export class Planet {

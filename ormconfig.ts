@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import * as path from 'path';
 
 export default {
   type: 'postgres',
@@ -8,7 +9,7 @@ export default {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   migrationsTableName: 'migrations_table',
-  entities: [__dirname + '/src/database/entities/*.entity.{js,ts}'],
+  entities: [path.join(__dirname, 'src/**/*.entity{.ts,.js}')],
   seeds: ['src/database/seeding/seeds/**/*{.ts,.js}'],
   migrations: [__dirname + '/src/database/migrations/*{.ts,.js}'],
 };

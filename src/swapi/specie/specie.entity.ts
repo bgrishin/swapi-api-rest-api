@@ -6,9 +6,9 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { Films } from '../films/film.entity';
+import { Films } from '../film/film.entity';
 import { People } from '../people/people.entity';
-import { Planet } from '../planets/planet.entity';
+import { Planet } from '../planet/planet.entity';
 
 @Entity()
 export class Species {

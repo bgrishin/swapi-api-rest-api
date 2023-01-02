@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
-import { Species } from '../../../swapi/species/specie.entity';
+import { Species } from '../../../swapi/specie/specie.entity';
 import { RelationsBuilder } from '../relationsBuilder';
 
 @Injectable()

@@ -1,9 +1,9 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 import { People } from '../people/people.entity';
-import { Planet } from '../planets/planet.entity';
-import { Species } from '../species/specie.entity';
-import { Starships } from '../starships/starship.entity';
-import { Vehicles } from '../vehicles/vehicle.entity';
+import { Planet } from '../planet/planet.entity';
+import { Species } from '../specie/specie.entity';
+import { Starships } from '../starship/starship.entity';
+import { Vehicles } from '../vehicle/vehicle.entity';
 
 @Entity()
 export class Films {

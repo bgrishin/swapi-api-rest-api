@@ -1,11 +1,11 @@
 import { Connection } from 'typeorm';
-import { AllSwapiDataInterface } from '../../common/interfaces/relations.ids.interface';
-import { Films } from '../../swapi/films/film.entity';
+import { AllSwapiDataInterface } from '../../common/interfaces/seeding.relations.interface';
+import { getIds } from '../../common/utils/seeding.utils';
+import { Films } from '../../swapi/film/film.entity';
 import { People } from '../../swapi/people/people.entity';
-import { Species } from '../../swapi/species/specie.entity';
-import { Starships } from '../../swapi/starships/starship.entity';
-import { Vehicles } from '../../swapi/vehicles/vehicle.entity';
-import { getIds } from '../../utils/seeding.utils';
+import { Species } from '../../swapi/specie/specie.entity';
+import { Starships } from '../../swapi/starship/starship.entity';
+import { Vehicles } from '../../swapi/vehicle/vehicle.entity';
 
 export class RelationsBuilder {
   public static dataObj: AllSwapiDataInterface = {
@@ -23,7 +23,7 @@ export class RelationsBuilder {
   public static async run(connection: Connection) {
     const data = RelationsBuilder.dataObj;
 
-    // films
+    // film
     await Promise.all(
       data.films.map(async (film) => {
         const id = +film.url.split('/')[5];
@@ -105,7 +105,7 @@ export class RelationsBuilder {
       }),
     );
 
-    // species
+    // specie
     await Promise.all(
       data.species.map(async (specie) => {
         const id = +specie.url.split('/')[5];
@@ -120,7 +120,7 @@ export class RelationsBuilder {
       }),
     );
 
-    // starships
+    // starship
     await Promise.all(
       data.starships.map(async (starship) => {
         const id = +starship.url.split('/')[5];
@@ -138,7 +138,7 @@ export class RelationsBuilder {
       }),
     );
 
-    // vehicles
+    // vehicle
     await Promise.all(
       data.vehicles.map(async (vehicle) => {
         const id = +vehicle.url.split('/')[5];

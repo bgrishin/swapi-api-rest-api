@@ -34,7 +34,7 @@ const truncateTable = async (queryRunner: QueryRunner, tableName: string) => {
   await truncateTable(queryRunner, 'species');
   await truncateTable(queryRunner, 'starships');
   await truncateTable(queryRunner, 'starships_pilots_people');
-  await truncateTable(queryRunner, 'users');
+  await truncateTable(queryRunner, 'user');
   await truncateTable(queryRunner, 'vehicles');
   await truncateTable(queryRunner, 'vehicles_pilots_people');
   console.log('Truncating finished.');

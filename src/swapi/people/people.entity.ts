@@ -7,11 +7,11 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { Films } from '../films/film.entity';
-import { Planet } from '../planets/planet.entity';
-import { Species } from '../species/specie.entity';
-import { Starships } from '../starships/starship.entity';
-import { Vehicles } from '../vehicles/vehicle.entity';
+import { Films } from '../film/film.entity';
+import { Planet } from '../planet/planet.entity';
+import { Species } from '../specie/specie.entity';
+import { Starships } from '../starship/starship.entity';
+import { Vehicles } from '../vehicle/vehicle.entity';
 
 @Entity()
 export class People {

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
-import { Roles } from '../../../auth/roles/role.types';
+import { Roles } from '../../../auth/types/role.enum';
 
-import { Users } from '../../../swapi/users/user.entity';
+import { Users } from '../../../swapi/user/user.entity';
 
 @Injectable()
 export default class FilmsSeeder implements Seeder {
@@ -13,7 +13,7 @@ export default class FilmsSeeder implements Seeder {
       {
         username: 'Bogdan',
         password: await hash('778899', await genSalt()),
-        roles: Roles.Admin,
+        roles: Roles.admin,
       },
       {
         username: 'bobr',

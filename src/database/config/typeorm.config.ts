@@ -8,6 +8,6 @@ export const TypeormConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   migrationsTableName: 'migrations_table',
-  entities: [__dirname + '/../entities/*.entity.{js,ts}'],
+  entities: [__dirname + '/../../**/*.entity.{js,ts}'],
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
 };

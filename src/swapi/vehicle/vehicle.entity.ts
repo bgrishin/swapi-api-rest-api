@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
-import { Films } from '../films/film.entity';
+import { Films } from '../film/film.entity';
 import { People } from '../people/people.entity';
 
 @Entity()
