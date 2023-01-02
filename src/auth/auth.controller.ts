@@ -15,12 +15,13 @@ import {
   ApiOkResponse,
   ApiResponse,
 } from '@nestjs/swagger';
-import { UserDto } from '../swapi/user/user.dto';
+import { SignUserDto, UserDto } from '../swapi/user/user.dto';
 import { Users } from '../swapi/user/user.entity';
 import { AuthService } from './auth.service';
 import { InfoDto, TokenDto } from './dto/auth.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AccessJwtAuthGuard } from './guards/access.jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RefreshTokenGuard } from './guards/refresh.jwt-auth.guard';
 import { Role } from './role/role.decorator';
 import { RoleGuard } from './role/role.guard';
 import { Roles } from './types/role.enum';
@@ -29,7 +30,7 @@ import { Roles } from './types/role.enum';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiBody({ type: UserDto })
+  @ApiBody({ type: SignUserDto })
   @ApiOkResponse({ type: TokenDto })
   @UseGuards(LocalAuthGuard)
   @Post('signin')
@@ -39,18 +40,18 @@ export class AuthController {
 
   @ApiBearerAuth()
   @ApiOkResponse({ type: InfoDto })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AccessJwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
   }
 
   @Post('signup')
-  @ApiBody({ type: UserDto })
+  @ApiBody({ type: SignUserDto })
   @ApiResponse({ status: 201, type: InfoDto })
   signup(
     @Body(new ValidationPipe()) userDto: UserDto,
-  ): Promise<Omit<Users, 'password'>> {
+  ): Promise<Omit<Users, 'password' | 'refreshToken'>> {
     return this.authService.register(userDto);
   }
 
@@ -58,8 +59,24 @@ export class AuthController {
   @ApiOkResponse({ type: InfoDto })
   @Put('admin/:name')
   @Role(Roles.admin)
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(AccessJwtAuthGuard, RoleGuard)
   addAdmin(@Param('name') name: string): Promise<Omit<Users, 'password'>> {
     return this.authService.addAdmin(name);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RefreshTokenGuard)
+  @Put('refresh')
+  refreshTokens(@Request() req) {
+    const userId = req.user.id;
+    const refreshToken = req.user.refreshToken;
+    return this.authService.refreshTokens(userId, refreshToken);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AccessJwtAuthGuard)
+  @Get('logout')
+  logout(@Request() req) {
+    this.authService.logout(req.user.id);
   }
 }

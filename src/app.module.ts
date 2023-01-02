@@ -3,16 +3,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { TypeormConfig } from './database/config/typeorm.config';
-import { UserModule } from './swapi/user/user.module';
 import { FileModule } from './swapi/file/file.module';
 import { FilmModule } from './swapi/film/film.module';
 import { PeopleModule } from './swapi/people/people.module';
 import { PlanetModule } from './swapi/planet/planet.module';
 import { SpecieModule } from './swapi/specie/specie.module';
 import { StarshipModule } from './swapi/starship/starship.module';
+import { UserController } from './swapi/user/user.controller';
+import { UserModule } from './swapi/user/user.module';
 import { VehicleModule } from './swapi/vehicle/vehicle.module';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import { AuthModule } from './auth/auth.module';
     VehicleModule,
     AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UserController],
   providers: [AppService],
 })
 export class AppModule {}

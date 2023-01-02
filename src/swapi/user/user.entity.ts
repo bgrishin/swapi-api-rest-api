@@ -12,6 +12,9 @@ export class Users {
   @Column()
   password: string;
 
+  @Column({ default: null })
+  refreshToken: string;
+
   @Column({ default: Roles.user })
   roles: Roles;
 }
