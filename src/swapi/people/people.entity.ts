@@ -8,6 +8,7 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { Films } from '../film/film.entity';
+import { FileImage, PublicImage } from '../images/images.entity';
 import { Planet } from '../planet/planet.entity';
 import { Species } from '../specie/specie.entity';
 import { Starships } from '../starship/starship.entity';
@@ -16,7 +17,7 @@ import { Vehicles } from '../vehicle/vehicle.entity';
 @Entity()
 export class People {
   @PrimaryColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -51,30 +52,30 @@ export class People {
   @ManyToMany(() => Films, (film) => film.characters)
   films: Films[];
 
-  @ManyToMany(() => Starships, (starship) => starship.pilots, { eager: true })
+  @ManyToMany(() => Starships, (starship) => starship.pilots)
   starships: Starships[];
 
-  @ManyToMany(() => Vehicles, (vehicle) => vehicle.pilots, { eager: true })
+  @ManyToMany(() => Vehicles, (vehicle) => vehicle.pilots)
   vehicles: Vehicles[];
 
-  @ManyToMany(() => Species, (species) => species.people, { eager: true })
+  @ManyToMany(() => Species, (species) => species.people)
   @JoinTable({
     joinColumn: { name: 'person_id' },
     inverseJoinColumn: { name: 'species_id' },
   })
   species: Species[];
 
-  // @ManyToMany(() => PublicImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'person_id' },
-  //   inverseJoinColumn: { name: 'public_image_id' },
-  // })
-  // publicImages: PublicImage[];
-  //
-  // @ManyToMany(() => FileImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'person_id' },
-  //   inverseJoinColumn: { name: 'file_image_id' },
-  // })
-  // fileImages: FileImage[];
+  @ManyToMany(() => PublicImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'public_image_id' },
+  })
+  public_images: PublicImage[];
+
+  @ManyToMany(() => FileImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'file_image_id' },
+  })
+  file_images: FileImage[];
 }
