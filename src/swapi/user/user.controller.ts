@@ -1,36 +1,51 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
-  Param,
+  Get,
+  ParseIntPipe,
   Put,
+  Query,
+  Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AccessJwtAuthGuard } from '../../auth/guards/access.jwt-auth.guard';
 import { Role } from '../../auth/role/role.decorator';
-import { RoleGuard } from '../../auth/role/role.guard';
 import { Roles } from '../../auth/types/role.enum';
-import { UserDto } from './user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { Users } from './user.entity';
 import { UserService } from './user.service';
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private usersService: UserService) {}
 
-  @Role(Roles.admin)
-  @ApiBearerAuth()
-  @UseGuards(AccessJwtAuthGuard, RoleGuard)
-  @Put(':id')
-  update(@Param('id') id: string, @Body() userDto: UserDto) {
-    return this.usersService.updateOne(+id, userDto);
+  @Get()
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
+  getUsers(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    return this.usersService.getAllUsers(page, limit);
   }
 
   @Role(Roles.admin)
   @ApiBearerAuth()
-  @UseGuards(AccessJwtAuthGuard, RoleGuard)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @UseGuards(AccessJwtAuthGuard)
+  @Put()
+  update(@Request() req, @Body() userDto: Partial<CreateUserDto>) {
+    return this.usersService.updateOne(+req.user.id, userDto);
+  }
+
+  @Role(Roles.admin)
+  @ApiBearerAuth()
+  @UseGuards(AccessJwtAuthGuard)
+  @Delete()
+  remove(@Request() req) {
+    return this.usersService.remove(+req.user.id);
   }
 }

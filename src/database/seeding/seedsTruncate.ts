@@ -1,41 +1,57 @@
-import { QueryRunner } from 'typeorm';
+import { Films } from '../../swapi/film/film.entity';
+import { FileImage, PublicImage } from '../../swapi/images/images.entity';
+import { People } from '../../swapi/people/people.entity';
+import { Planet } from '../../swapi/planet/planet.entity';
+import { Species } from '../../swapi/specie/specie.entity';
+import { Starships } from '../../swapi/starship/starship.entity';
+import { Users } from '../../swapi/user/user.entity';
+import { Vehicles } from '../../swapi/vehicle/vehicle.entity';
 import { TypeormDatasource } from '../config/typeorm.datasource';
 
-//for now, don't work
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const truncateTable = async (queryRunner: QueryRunner, tableName: string) => {
-  await queryRunner.query(`ALTER TABLE ${tableName} DISABLE TRIGGER ALL`);
-  await queryRunner.query(`TRUNCATE TABLE ${tableName}`);
-  await queryRunner.query(`ALTER TABLE ${tableName} ENABLE TRIGGER ALL`);
-};
+const attentionMessage =
+  "\x1b[31m\x1b[5mATTENTION! \x1b[0m\nThis process will destroy all data in your database. Please make sure that you're ready for destructing all data. \nProcess will be started in 10 seconds, to cancel it press \x1b[32mCtrl + C.\x1b[0m";
 
 (async () => {
   console.log('Connecting database.');
+
   await TypeormDatasource.initialize();
+
   console.log('Database connected.');
-  const queryRunner = TypeormDatasource.createQueryRunner();
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  console.log(
-    "\x1b[31m\x1b[5mATTENTION! \x1b[0mThis process will destroy all swapi in your database. Please make sure that you're ready for destructing all swapi. Process will be started in 10 seconds, to cancel it press \x1b[32mCtrl + C.\x1b[0m",
-  );
+
+  console.log(attentionMessage);
+
+  const repository = TypeormDatasource.getRepository(Films);
+  // now you can call repository methods, for example find:
+  const users = await repository.find();
+  console.log(users);
+
   await sleep(10000);
+
   console.log('Truncating started.');
-  await truncateTable(queryRunner, 'file_image');
-  await truncateTable(queryRunner, 'films');
-  await truncateTable(queryRunner, 'films_characters_people');
-  await truncateTable(queryRunner, 'films_planets_planet');
-  await truncateTable(queryRunner, 'films_species_species');
-  await truncateTable(queryRunner, 'films_starships_starships');
-  await truncateTable(queryRunner, 'films_vehicles_vehicles');
-  await truncateTable(queryRunner, 'people');
-  await truncateTable(queryRunner, 'people_species_species');
-  await truncateTable(queryRunner, 'planet');
-  await truncateTable(queryRunner, 'public_image');
-  await truncateTable(queryRunner, 'species');
-  await truncateTable(queryRunner, 'starships');
-  await truncateTable(queryRunner, 'starships_pilots_people');
-  await truncateTable(queryRunner, 'user');
-  await truncateTable(queryRunner, 'vehicles');
-  await truncateTable(queryRunner, 'vehicles_pilots_people');
+
+  const manager = TypeormDatasource.manager;
+
+  await manager.getRepository(Films).clear();
+
+  await manager.getRepository(PublicImage).clear();
+
+  await manager.getRepository(FileImage).clear();
+
+  await manager.getRepository(People).clear();
+
+  await manager.getRepository(Planet).clear();
+
+  await manager.getRepository(Species).clear();
+
+  await manager.getRepository(Starships).clear();
+
+  await manager.getRepository(Users).clear();
+
+  await manager.getRepository(Vehicles).clear();
+
   console.log('Truncating finished.');
+
+  await TypeormDatasource.destroy();
 })();

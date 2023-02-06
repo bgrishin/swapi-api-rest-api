@@ -6,25 +6,25 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
-import { UserDto } from '../swapi/user/user.dto';
+import { CreateUserDto } from '../swapi/user/dto/create-user.dto';
 import { Users } from '../swapi/user/user.entity';
 import { UserService } from '../swapi/user/user.service';
-import { UserPayload } from './dto/user-payload.dto';
+import { UserJwtPayload } from './dto/user-jwt-payload.dto';
 import { Roles } from './types/role.enum';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
-    private configService: ConfigService,
-    private jwtService: JwtService,
+    private _usersService: UserService,
+    private _configService: ConfigService,
+    private _jwtService: JwtService,
   ) {}
 
   async validateUser(
     username: string,
     password: string,
   ): Promise<Omit<Users, 'password'> | null> {
-    const user = await this.usersService.findOneByUsername(username);
+    const user = await this._usersService.findOneByUsername(username);
     if (!user) return null;
     const check = await compare(password, user.password);
     if (check) {
@@ -46,47 +46,47 @@ export class AuthService {
   }
 
   async register(
-    userDto: UserDto,
+    userDto: CreateUserDto,
   ): Promise<Omit<Users, 'password' | 'refreshToken'>> {
-    const user = await this.usersService.findOneByUsername(
+    const user = await this._usersService.findOneByUsername(
       userDto.username,
       false,
     );
     if (user) throw new BadRequestException('User is already exists');
     return this.hashData(userDto.password).then(async (hash) => {
-      const user = await this.usersService.createUser(userDto.username, hash);
+      const user = await this._usersService.createUser(userDto.username, hash);
       const { password, refreshToken, ...result } = user;
       return result;
     });
   }
 
   async logout(id: number) {
-    return this.usersService.updateOne(id, { refreshToken: null });
+    return this._usersService.updateOne(id, { refreshToken: null });
   }
 
   async addAdmin(username: string): Promise<Omit<Users, 'password'>> {
-    let user = await this.usersService.findOneByUsername(username);
+    let user = await this._usersService.findOneByUsername(username);
     user.roles = Roles.admin;
-    user = await this.usersService.addRoleAdmin(user);
+    user = await this._usersService.addRoleAdmin(user);
     const { password, ...result } = user;
     return result;
   }
 
   async updateRefreshToken(id: number, refreshToken: string) {
     const hashedRefreshToken = await this.hashData(refreshToken);
-    await this.usersService.updateOne(id, {
+    await this._usersService.updateOne(id, {
       refreshToken: hashedRefreshToken,
     });
   }
 
-  async getJwtTokens(payload: UserPayload) {
+  async getJwtTokens(payload: UserJwtPayload) {
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('ACCESS_JWT_SECRET'),
-        expiresIn: '15m',
+      this._jwtService.signAsync(payload, {
+        secret: this._configService.get<string>('ACCESS_JWT_SECRET'),
+        expiresIn: '30m',
       }),
-      this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('REFRESH_JWT_SECRET'),
+      this._jwtService.signAsync(payload, {
+        secret: this._configService.get<string>('REFRESH_JWT_SECRET'),
         expiresIn: '7d',
       }),
     ]);
@@ -98,7 +98,7 @@ export class AuthService {
   }
 
   async refreshTokens(id: string, refreshToken: string) {
-    const user = await this.usersService.findOneById(+id);
+    const user = await this._usersService.findOneById(+id);
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
     const refreshTokenMatches = await compare(refreshToken, user.refreshToken);

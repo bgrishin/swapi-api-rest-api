@@ -5,7 +5,6 @@ import {
   Param,
   Post,
   Put,
-  Request,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,11 +13,14 @@ import {
   ApiBody,
   ApiOkResponse,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
-import { SignUserDto, UserDto } from '../swapi/user/user.dto';
+import { User } from '../common/decorators/user.decorator';
+import { CreateUserDto } from '../swapi/user/dto/create-user.dto';
 import { Users } from '../swapi/user/user.entity';
 import { AuthService } from './auth.service';
-import { InfoDto, TokenDto } from './dto/auth.dto';
+import { JwtTokenDto } from './dto/jwt-token.dto';
+import { InfoDto } from './dto/profile-info.dto';
 import { AccessJwtAuthGuard } from './guards/access.jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshTokenGuard } from './guards/refresh.jwt-auth.guard';
@@ -26,33 +28,34 @@ import { Role } from './role/role.decorator';
 import { RoleGuard } from './role/role.guard';
 import { Roles } from './types/role.enum';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiBody({ type: SignUserDto })
-  @ApiOkResponse({ type: TokenDto })
+  @ApiBody({ type: CreateUserDto })
+  @ApiOkResponse({ type: JwtTokenDto })
   @UseGuards(LocalAuthGuard)
   @Post('signin')
-  async signin(@Request() req) {
-    return this.authService.login(req.user);
+  signIn(@User() user) {
+    return this.authService.login(user);
+  }
+
+  @Post('signup')
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ status: 201, type: InfoDto })
+  signup(
+    @Body(new ValidationPipe()) userDto: CreateUserDto,
+  ): Promise<Omit<Users, 'password' | 'refreshToken'>> {
+    return this.authService.register(userDto);
   }
 
   @ApiBearerAuth()
   @ApiOkResponse({ type: InfoDto })
   @UseGuards(AccessJwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
-  @Post('signup')
-  @ApiBody({ type: SignUserDto })
-  @ApiResponse({ status: 201, type: InfoDto })
-  signup(
-    @Body(new ValidationPipe()) userDto: UserDto,
-  ): Promise<Omit<Users, 'password' | 'refreshToken'>> {
-    return this.authService.register(userDto);
+  getProfile(@User() user) {
+    return user;
   }
 
   @ApiBearerAuth()
@@ -67,16 +70,14 @@ export class AuthController {
   @ApiBearerAuth()
   @UseGuards(RefreshTokenGuard)
   @Put('refresh')
-  refreshTokens(@Request() req) {
-    const userId = req.user.id;
-    const refreshToken = req.user.refreshToken;
-    return this.authService.refreshTokens(userId, refreshToken);
+  refreshTokens(@User() { id, refreshToken }) {
+    return this.authService.refreshTokens(id, refreshToken);
   }
 
   @ApiBearerAuth()
   @UseGuards(AccessJwtAuthGuard)
   @Get('logout')
-  logout(@Request() req) {
-    this.authService.logout(req.user.id);
+  logout(@User() { id }) {
+    return this.authService.logout(id);
   }
 }

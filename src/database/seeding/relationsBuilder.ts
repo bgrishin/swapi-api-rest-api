@@ -1,5 +1,5 @@
 import { Connection } from 'typeorm';
-import { AllSwapiDataInterface } from '../../common/interfaces/seeding.relations.interface';
+import { AllSwapiDataInterface } from '../../common/types/seeding.relations.types';
 import { getIds } from '../../common/utils/seeding.utils';
 import { Films } from '../../swapi/film/film.entity';
 import { People } from '../../swapi/people/people.entity';

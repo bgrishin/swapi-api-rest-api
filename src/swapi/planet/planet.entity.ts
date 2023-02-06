@@ -1,12 +1,20 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { Films } from '../film/film.entity';
+import { FileImage, PublicImage } from '../images/images.entity';
 import { People } from '../people/people.entity';
 import { Species } from '../specie/specie.entity';
 
 @Entity()
 export class Planet {
   @PrimaryColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -35,26 +43,26 @@ export class Planet {
   @Column()
   surface_water: string;
 
-  @OneToMany(() => People, (people) => people.homeworld, { eager: true })
+  @OneToMany(() => People, (people) => people.homeworld)
   residents: People[];
 
-  @OneToMany(() => Species, (species) => species.homeworld, { eager: true })
+  @OneToMany(() => Species, (species) => species.homeworld)
   species: Species[];
 
   @ManyToMany(() => Films, (film) => film.planets)
   films: Films[];
 
-  // @ManyToMany(() => PublicImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'planet_id' },
-  //   inverseJoinColumn: { name: 'public_image_id' },
-  // })
-  // publicImages: PublicImage[];
-  //
-  // @ManyToMany(() => FileImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'planet_id' },
-  //   inverseJoinColumn: { name: 'file_image_id' },
-  // })
-  // fileImages: FileImage[];
+  @ManyToMany(() => PublicImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'public_image_id' },
+  })
+  public_images: PublicImage[];
+
+  @ManyToMany(() => FileImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'file_image_id' },
+  })
+  file_images: FileImage[];
 }

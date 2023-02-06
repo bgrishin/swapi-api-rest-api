@@ -9,13 +9,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh.jwt.strategy';
 
 @Module({
-  imports: [
-    UserModule,
-    PassportModule,
-    JwtModule.register({
-      signOptions: { expiresIn: '60m' },
-    }),
-  ],
+  imports: [UserModule, PassportModule, JwtModule.register({})],
   providers: [
     AuthService,
     LocalStrategy,

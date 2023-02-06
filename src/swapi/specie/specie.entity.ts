@@ -2,18 +2,20 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
 import { Films } from '../film/film.entity';
+import { FileImage, PublicImage } from '../images/images.entity';
 import { People } from '../people/people.entity';
 import { Planet } from '../planet/planet.entity';
 
 @Entity()
 export class Species {
   @PrimaryColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -49,17 +51,17 @@ export class Species {
   @ManyToMany(() => Films, (film) => film.species)
   films: Films[];
 
-  // @ManyToMany(() => PublicImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'species_id' },
-  //   inverseJoinColumn: { name: 'public_image_id' },
-  // })
-  // publicImages: PublicImage[];
-  //
-  // @ManyToMany(() => FileImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'species_id' },
-  //   inverseJoinColumn: { name: 'file_image_id' },
-  // })
-  // fileImages: FileImage[];
+  @ManyToMany(() => PublicImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'public_image_id' },
+  })
+  public_images: PublicImage[];
+
+  @ManyToMany(() => FileImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'file_image_id' },
+  })
+  file_images: FileImage[];
 }

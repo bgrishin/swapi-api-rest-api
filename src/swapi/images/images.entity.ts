@@ -5,8 +5,8 @@ export class FileImage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'file_name' })
-  fileName: string;
+  @Column()
+  file_name: string;
 }
 
 @Entity()

@@ -1,11 +1,12 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 import { Films } from '../film/film.entity';
+import { FileImage, PublicImage } from '../images/images.entity';
 import { People } from '../people/people.entity';
 
 @Entity()
 export class Starships {
   @PrimaryColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -56,17 +57,17 @@ export class Starships {
   })
   pilots: People[];
 
-  // @ManyToMany(() => PublicImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'starship_id' },
-  //   inverseJoinColumn: { name: 'public_image_id' },
-  // })
-  // publicImages: PublicImage[];
-  //
-  // @ManyToMany(() => FileImage)
-  // @JoinTable({
-  //   joinColumn: { name: 'starship_id' },
-  //   inverseJoinColumn: { name: 'file_image_id' },
-  // })
-  // fileImages: FileImage[];
+  @ManyToMany(() => PublicImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'public_image_id' },
+  })
+  public_images: PublicImage[];
+
+  @ManyToMany(() => FileImage)
+  @JoinTable({
+    joinColumn: { name: 'film_id' },
+    inverseJoinColumn: { name: 'file_image_id' },
+  })
+  file_images: FileImage[];
 }
