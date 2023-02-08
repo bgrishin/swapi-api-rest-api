@@ -10,6 +10,7 @@ export default class SpeciesSeed implements Seeder {
   // 4
   public async run(factory: Factory, connection: Connection): Promise<void> {
     const dataCopy = [];
+    let id = 1;
     async function iteration(url: string): Promise<undefined> {
       const res = await axios.get(url).then((response) => response.data);
       const data = [...res.results];
@@ -21,8 +22,9 @@ export default class SpeciesSeed implements Seeder {
         .values(
           data.map((x) => {
             const { created, edited, url, homeworld, ...entity } = x;
-            dataCopy.push(x);
-            return { ...entity, id: +url.split('/')[5] };
+            dataCopy.push({ ...entity, url, homeworld, id });
+            id++;
+            return { ...entity };
           }),
         )
         .execute();

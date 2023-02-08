@@ -11,6 +11,7 @@ export default class VehiclesSeed implements Seeder {
   // 6 (the last, and then we execute relation builder)
   public async run(factory: Factory, connection: Connection): Promise<void> {
     const dataCopy = [];
+    let id = 1;
     async function iteration(url: string): Promise<undefined> {
       const res = await axios.get(url).then((response) => response.data);
 
@@ -21,10 +22,11 @@ export default class VehiclesSeed implements Seeder {
         .insert()
         .into(Vehicles)
         .values(
-          data.map((x) => {
+          data.map((x, i) => {
             const { created, edited, url, ...entity } = x;
-            dataCopy.push(x);
-            return { ...entity, id: +url.split('/')[5] };
+            dataCopy.push({ ...entity, url, id });
+            id++;
+            return { ...entity };
           }),
         )
         .execute();

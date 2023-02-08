@@ -26,7 +26,7 @@ export class RelationsBuilder {
     // film
     await Promise.all(
       data.films.map(async (film) => {
-        const id = +film.url.split('/')[5];
+        const id = film.id;
         const charactersIds = getIds(film.characters),
           planetsIds = getIds(film.planets),
           starshipsIds = getIds(film.starships),
@@ -83,8 +83,10 @@ export class RelationsBuilder {
     // people
     await Promise.all(
       data.people.map(async (people) => {
-        const id = +people.url.split('/')[5];
-        const homeworldId = +people.homeworld.split('/')[5];
+        const id = people.id;
+        const homeworldId = data.planets.find(
+          (planet) => planet.url === people.homeworld,
+        ).id;
         const speciesIds = getIds(people.species);
 
         await connection
@@ -108,10 +110,10 @@ export class RelationsBuilder {
     // specie
     await Promise.all(
       data.species.map(async (specie) => {
-        const id = +specie.url.split('/')[5];
+        const id = specie.id;
         const homeworldId = !specie.homeworld
           ? null
-          : +specie.homeworld.split('/')[5];
+          : data.planets.find((planet) => planet.url === specie.homeworld).id;
         await connection
           .createQueryBuilder()
           .relation(Species, 'homeworld')
@@ -123,7 +125,7 @@ export class RelationsBuilder {
     // starship
     await Promise.all(
       data.starships.map(async (starship) => {
-        const id = +starship.url.split('/')[5];
+        const id = starship.id;
         const pilotsIds = getIds(starship.pilots);
 
         await Promise.all(
@@ -141,7 +143,7 @@ export class RelationsBuilder {
     // vehicle
     await Promise.all(
       data.vehicles.map(async (vehicle) => {
-        const id = +vehicle.url.split('/')[5];
+        const id = vehicle.id;
         const pilotsIds = getIds(vehicle.pilots);
         await Promise.all(
           pilotsIds.map(async (x) => {

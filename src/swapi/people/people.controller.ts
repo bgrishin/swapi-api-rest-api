@@ -27,7 +27,7 @@ export class PeopleController {
   }
 
   @Get(':id')
-  getOnePerson(@Param('id') id: number) {
+  getOnePerson(@Param('id', ParseIntPipe) id: number) {
     return this.peopleService.getOnePerson(id);
   }
 }

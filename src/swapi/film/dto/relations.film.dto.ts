@@ -1,29 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsOptional } from 'class-validator';
+import { IsArray, IsNumber, IsOptional } from 'class-validator';
 
 export class FilmRelations {
-  @ApiProperty({ type: [String], required: false })
+  @ApiProperty({ type: [Number], required: false })
+  @IsNumber({}, { each: true })
   @IsArray()
   @IsOptional()
-  characters?: string[];
+  characters?: number[];
 
-  @ApiProperty({ type: [String], required: false })
+  @ApiProperty({ type: [Number], required: false })
+  @IsNumber({}, { each: true })
   @IsArray()
   @IsOptional()
-  planets?: string[];
+  planets?: number[];
 
-  @ApiProperty({ type: [String], required: false })
+  @ApiProperty({ type: [Number], required: false })
+  @IsNumber({}, { each: true })
   @IsArray()
   @IsOptional()
-  starships?: string[];
+  starships?: number[];
 
-  @ApiProperty({ type: [String], required: false })
+  @ApiProperty({ type: [Number], required: false })
+  @IsNumber({}, { each: true })
   @IsArray()
   @IsOptional()
-  vehicles?: string[];
+  vehicles?: number[];
 
-  @ApiProperty({ type: [String], required: false })
+  @ApiProperty({ type: [Number], required: false })
+  @IsNumber({}, { each: true })
   @IsArray()
   @IsOptional()
-  species?: string[];
+  species?: number[];
 }

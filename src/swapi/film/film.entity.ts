@@ -1,4 +1,10 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { FileImage, PublicImage } from '../images/images.entity';
 import { People } from '../people/people.entity';
 import { Planet } from '../planet/planet.entity';
@@ -8,8 +14,8 @@ import { Vehicles } from '../vehicle/vehicle.entity';
 
 @Entity()
 export class Films {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   title: string;

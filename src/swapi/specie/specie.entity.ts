@@ -5,7 +5,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Films } from '../film/film.entity';
 import { FileImage, PublicImage } from '../images/images.entity';
@@ -14,8 +14,8 @@ import { Planet } from '../planet/planet.entity';
 
 @Entity()
 export class Species {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   name: string;

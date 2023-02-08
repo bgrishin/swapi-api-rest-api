@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
-import * as uuid from 'uuid';
 import { RelationsService } from '../../common/relations/relations.service';
 import { ImagesService } from '../images/images.service';
 import { CreateFilmDto } from './dto/create.film.dto';
@@ -36,7 +35,7 @@ export class FilmService {
     return paginate<Films>(this._filmsRepository, { page, limit });
   }
 
-  async getOneFilm(id: string) {
+  async getOneFilm(id: number) {
     return await this._filmsRepository.findOne({
       where: { id },
       relationLoadStrategy: 'query',
@@ -44,7 +43,7 @@ export class FilmService {
     });
   }
 
-  async deleteFilm(id: string) {
+  async deleteFilm(id: number) {
     const film = await this.getOneFilm(id);
     if (!film) return new HttpException('Film not found', HttpStatus.NOT_FOUND);
 
@@ -65,7 +64,7 @@ export class FilmService {
       public_images: publicImages,
       file_images: fileImages,
     });
-    return this._filmsRepository.save({ id: uuid.v4(), ...filmToCreate });
+    return this._filmsRepository.save({ ...filmToCreate });
   }
 
   async addImages(film: Films, images: Express.Multer.File[]): Promise<Films> {

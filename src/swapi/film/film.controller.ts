@@ -53,7 +53,7 @@ export class FilmController {
   }
 
   @Get(':id')
-  async getOneFilm(@Param('id') id: string) {
+  async getOneFilm(@Param('id', ParseIntPipe) id: number) {
     const film = await this._filmsService.getOneFilm(id);
     if (!film) return new HttpException('Film not found', HttpStatus.NOT_FOUND);
     return film;
@@ -63,7 +63,7 @@ export class FilmController {
   @ApiBearerAuth()
   @Role(Roles.admin)
   @UseGuards(AccessJwtAuthGuard, RoleGuard)
-  async deleteFilm(@Param('id') id: string) {
+  async deleteFilm(@Param('id', ParseIntPipe) id: number) {
     return this._filmsService.deleteFilm(id);
   }
 
@@ -85,8 +85,11 @@ export class FilmController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: AddImagesDto })
   @UseInterceptors(FilesInterceptor('images', 10, imageOptions))
+  @ApiBearerAuth()
+  @Role(Roles.admin)
+  @UseGuards(AccessJwtAuthGuard, RoleGuard)
   async addImages(
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id', ParseIntPipe) id: number,
     @UploadedFiles() images: Express.Multer.File[],
   ) {
     const film = await this._filmsService.getOneFilm(id);
@@ -95,8 +98,11 @@ export class FilmController {
   }
 
   @Put('add-relations/:id')
+  @ApiBearerAuth()
+  @Role(Roles.admin)
+  @UseGuards(AccessJwtAuthGuard, RoleGuard)
   async createRelations(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) relations: FilmRelations,
   ) {
     const filmToUpdate = await this._filmsService.getOneFilm(id);
@@ -105,8 +111,11 @@ export class FilmController {
   }
 
   @Delete('remove-relations/:id')
+  @ApiBearerAuth()
+  @Role(Roles.admin)
+  @UseGuards(AccessJwtAuthGuard, RoleGuard)
   async removeRelations(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) relations: FilmRelations,
   ) {
     const filmToUpdate = await this._filmsService.getOneFilm(id);

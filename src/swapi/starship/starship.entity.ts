@@ -1,12 +1,18 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Films } from '../film/film.entity';
 import { FileImage, PublicImage } from '../images/images.entity';
 import { People } from '../people/people.entity';
 
 @Entity()
 export class Starships {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   name: string;

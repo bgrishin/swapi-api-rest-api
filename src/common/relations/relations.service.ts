@@ -6,7 +6,7 @@ import { IdEntityInterface } from '../types/id.entity.interface';
 export class RelationsService {
   async addRelations<T extends IdEntityInterface>(
     entity: T,
-    relations: Partial<Record<string, string[] | string>>,
+    relations: Partial<Record<string, number[] | number>>,
   ): Promise<T> {
     const dataSource = await TypeormDatasource.initialize();
     for (const connectedEntityName in relations) {
@@ -15,7 +15,7 @@ export class RelationsService {
           this.entityNameTransformer(connectedEntityName);
         const entitiesToConnectPromises = [];
         if (typeof relations[connectedEntityName] === 'object') {
-          (relations[connectedEntityName] as string[]).map(async (id) => {
+          (relations[connectedEntityName] as number[]).map(async (id) => {
             const entityToConnect = dataSource
               .getRepository(generalEntityName)
               .findOne({
@@ -50,7 +50,7 @@ export class RelationsService {
 
   async removeRelations<T extends IdEntityInterface>(
     entity: T,
-    relations: Partial<Record<string, string[] | string>>,
+    relations: Partial<Record<string, number[] | number>>,
   ): Promise<T> {
     const dataSource = await TypeormDatasource.initialize();
     for (const connectedEntityName in relations) {
@@ -59,7 +59,7 @@ export class RelationsService {
           this.entityNameTransformer(connectedEntityName);
         if (typeof relations[connectedEntityName] === 'object') {
           const entitiesToDisconnectPromises = [];
-          (relations[connectedEntityName] as string[]).map(async (id) => {
+          (relations[connectedEntityName] as number[]).map(async (id) => {
             const entityToDisconnect = await dataSource
               .getRepository(generalEntityName)
               .findOne({ where: { id }, loadEagerRelations: false });

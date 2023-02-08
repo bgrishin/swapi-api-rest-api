@@ -27,7 +27,7 @@ export class PeopleService {
 
   async getOnePerson(id: number) {
     const person = await this._peopleRepository.findOne({
-      where: { id: id.toString() },
+      where: { id },
       relationLoadStrategy: 'query',
       relations: this.relationsArr,
     });

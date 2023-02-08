@@ -10,7 +10,7 @@ async function bootstrap() {
   const port = config.get('APP_PORT');
   const swagger = new DocumentBuilder()
     .setTitle('Swapi API (unofficial)')
-    .setDescription('API above fetched data from swapi.dev')
+    .setDescription('API of fetched data from swapi.dev')
     .addBearerAuth()
     .setVersion('1.0')
     .build();
