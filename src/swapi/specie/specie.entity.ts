@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -15,30 +16,39 @@ import { Planet } from '../planet/planet.entity';
 @Entity()
 export class Species {
   @PrimaryGeneratedColumn()
+  @ApiProperty()
   id: number;
 
   @Column()
+  @ApiProperty()
   name: string;
 
   @Column()
+  @ApiProperty()
   classification: string;
 
   @Column()
+  @ApiProperty()
   designation: string;
 
   @Column()
+  @ApiProperty()
   average_height: string;
 
   @Column()
+  @ApiProperty()
   average_lifespan: string;
 
   @Column()
+  @ApiProperty()
   eye_colors: string;
 
   @Column()
+  @ApiProperty()
   hair_colors: string;
 
   @Column()
+  @ApiProperty()
   language: string;
 
   @ManyToOne(() => Planet, (planet) => planet.species, { onDelete: 'SET NULL' })
@@ -46,9 +56,11 @@ export class Species {
   homeworld: Planet;
 
   @ManyToMany(() => People, (person) => person.species)
+  @ApiProperty()
   people: People[];
 
   @ManyToMany(() => Films, (film) => film.species)
+  @ApiProperty()
   films: Films[];
 
   @ManyToMany(() => PublicImage)
@@ -56,6 +68,7 @@ export class Species {
     joinColumn: { name: 'film_id' },
     inverseJoinColumn: { name: 'public_image_id' },
   })
+  @ApiProperty()
   public_images: PublicImage[];
 
   @ManyToMany(() => FileImage)
@@ -63,5 +76,6 @@ export class Species {
     joinColumn: { name: 'film_id' },
     inverseJoinColumn: { name: 'file_image_id' },
   })
+  @ApiProperty()
   file_images: FileImage[];
 }

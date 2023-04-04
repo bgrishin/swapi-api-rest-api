@@ -4,7 +4,7 @@ import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { RelationsService } from '../../common/relations/relations.service';
 import { ImagesService } from '../images/images.service';
-import { CreateFilmDto } from './dto/create.film.dto';
+import { CreateFilmDto, UpdateFilmDto } from './dto/create.film.dto';
 import { FilmRelations } from './dto/relations.film.dto';
 import { Films } from './film.entity';
 
@@ -65,6 +65,14 @@ export class FilmService {
       file_images: fileImages,
     });
     return this._filmsRepository.save({ ...filmToCreate });
+  }
+
+  async updateFilm(id: number, film: UpdateFilmDto) {
+    const filmToCreate: Films = new Films();
+    Object.assign(filmToCreate, {
+      ...film,
+    });
+    return this._filmsRepository.update(id, { ...filmToCreate });
   }
 
   async addImages(film: Films, images: Express.Multer.File[]): Promise<Films> {

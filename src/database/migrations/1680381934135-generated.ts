@@ -1,18 +1,19 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class generated1675862282261 implements MigrationInterface {
-    name = 'generated1675862282261'
+export class generated1680381934135 implements MigrationInterface {
+    name = 'generated1680381934135'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`CREATE TABLE "users" ("id" SERIAL NOT NULL, "username" character varying NOT NULL, "password" character varying NOT NULL, "roles" character varying NOT NULL DEFAULT 'user', CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710" UNIQUE ("username"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "refresh_token" ("id" SERIAL NOT NULL, "token" character varying NOT NULL, "userId" integer, CONSTRAINT "PK_b575dd3c21fb0831013c909e7fe" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "file_image" ("id" SERIAL NOT NULL, "file_name" character varying NOT NULL, CONSTRAINT "PK_378728468f1edd285f78bff8bdb" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "public_image" ("id" SERIAL NOT NULL, "url" character varying NOT NULL, "key" character varying NOT NULL, CONSTRAINT "PK_4bac01d707d8500722ea10a85a3" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "species" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "classification" character varying NOT NULL, "designation" character varying NOT NULL, "average_height" character varying NOT NULL, "average_lifespan" character varying NOT NULL, "eye_colors" character varying NOT NULL, "hair_colors" character varying NOT NULL, "language" character varying NOT NULL, "homeworld_id" integer, CONSTRAINT "PK_ae6a87f2423ba6c25dc43c32770" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "planet" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "diameter" character varying NOT NULL, "rotation_period" character varying NOT NULL, "orbital_period" character varying NOT NULL, "gravity" character varying NOT NULL, "population" character varying NOT NULL, "climate" character varying NOT NULL, "terrain" character varying NOT NULL, "surface_water" character varying NOT NULL, CONSTRAINT "PK_cb7506671ad0f19d6287ee4bfb7" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "starships" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "model" character varying NOT NULL, "starship_class" character varying NOT NULL, "manufacturer" character varying NOT NULL, "cost_in_credits" character varying NOT NULL, "length" character varying NOT NULL, "crew" character varying NOT NULL, "passengers" character varying NOT NULL, "max_atmosphering_speed" character varying NOT NULL, "MGLT" character varying NOT NULL, "hyperdrive_rating" character varying NOT NULL, "cargo_capacity" character varying NOT NULL, "consumables" character varying NOT NULL, CONSTRAINT "PK_10c86d0ac9be05d3f986287a092" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "vehicles" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "model" character varying NOT NULL, "vehicle_class" character varying NOT NULL, "manufacturer" character varying NOT NULL, "length" character varying NOT NULL, "cost_in_credits" character varying NOT NULL, "crew" character varying NOT NULL, "passengers" character varying NOT NULL, "max_atmosphering_speed" character varying NOT NULL, "cargo_capacity" character varying NOT NULL, "consumables" character varying NOT NULL, CONSTRAINT "PK_18d8646b59304dce4af3a9e35b6" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "films" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, "episode_id" integer NOT NULL, "opening_crawl" character varying NOT NULL, "director" character varying NOT NULL, "producer" character varying NOT NULL, "release_date" character varying NOT NULL, CONSTRAINT "PK_697487ada088902377482c970d1" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "people" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "birth_year" character varying NOT NULL, "gender" character varying NOT NULL, "height" character varying NOT NULL, "mass" character varying NOT NULL, "eye_color" character varying NOT NULL, "hair_color" character varying NOT NULL, "skin_color" character varying NOT NULL, "homeworld_id" integer, CONSTRAINT "PK_aa866e71353ee94c6cc51059c5b" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "users" ("id" SERIAL NOT NULL, "username" character varying NOT NULL, "password" character varying NOT NULL, "refreshToken" character varying, "roles" character varying NOT NULL DEFAULT 'user', CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710" UNIQUE ("username"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "films" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, "episode_id" integer NOT NULL, "opening_crawl" character varying NOT NULL, "director" character varying NOT NULL, "producer" character varying NOT NULL, "release_date" character varying NOT NULL, CONSTRAINT "PK_697487ada088902377482c970d1" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "species_public_images_public_image" ("film_id" integer NOT NULL, "public_image_id" integer NOT NULL, CONSTRAINT "PK_1a52294167e91d45d3506b4facc" PRIMARY KEY ("film_id", "public_image_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_f0a5b7f31e759f7a6a58772f20" ON "species_public_images_public_image" ("film_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_8542c2cb80cd87ed017de247b4" ON "species_public_images_public_image" ("public_image_id") `);
@@ -43,6 +44,15 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "vehicles_file_images_file_image" ("film_id" integer NOT NULL, "file_image_id" integer NOT NULL, CONSTRAINT "PK_62f6cdda6efae618beff9142250" PRIMARY KEY ("film_id", "file_image_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_2221626b462cffa13532bb11c0" ON "vehicles_file_images_file_image" ("film_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_5237330a18928d51a099c8049a" ON "vehicles_file_images_file_image" ("file_image_id") `);
+        await queryRunner.query(`CREATE TABLE "people_species_species" ("person_id" integer NOT NULL, "species_id" integer NOT NULL, CONSTRAINT "PK_4e6b44b9698462cce59b232546e" PRIMARY KEY ("person_id", "species_id"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_b2e56e637791bb0c3cc125abda" ON "people_species_species" ("person_id") `);
+        await queryRunner.query(`CREATE INDEX "IDX_d97e36a57ecd53522439ba8d4f" ON "people_species_species" ("species_id") `);
+        await queryRunner.query(`CREATE TABLE "people_public_images_public_image" ("film_id" integer NOT NULL, "public_image_id" integer NOT NULL, CONSTRAINT "PK_1c0fee93e2143074412b9ae1223" PRIMARY KEY ("film_id", "public_image_id"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_142d42bcb59e825e464c22f683" ON "people_public_images_public_image" ("film_id") `);
+        await queryRunner.query(`CREATE INDEX "IDX_0cafaf0a5090196b3949f6fe12" ON "people_public_images_public_image" ("public_image_id") `);
+        await queryRunner.query(`CREATE TABLE "people_file_images_file_image" ("film_id" integer NOT NULL, "file_image_id" integer NOT NULL, CONSTRAINT "PK_6085cd3ea2a98ee9307692e8f81" PRIMARY KEY ("film_id", "file_image_id"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_5506c4e6b3d320999aa96eec06" ON "people_file_images_file_image" ("film_id") `);
+        await queryRunner.query(`CREATE INDEX "IDX_b803360801b76ccac9f5f7aad7" ON "people_file_images_file_image" ("file_image_id") `);
         await queryRunner.query(`CREATE TABLE "films_characters_people" ("film_id" integer NOT NULL, "character_id" integer NOT NULL, CONSTRAINT "PK_ea2b3b31d261d7ad51cf2f965b2" PRIMARY KEY ("film_id", "character_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_0c312594eabb28c7bf3a07ef6f" ON "films_characters_people" ("film_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_6f6c60ddedf853394b1c99f0d4" ON "films_characters_people" ("character_id") `);
@@ -64,15 +74,7 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "films_file_images_file_image" ("film_id" integer NOT NULL, "file_image_id" integer NOT NULL, CONSTRAINT "PK_3dbc8f89ef1d2b4ca511f2a32e2" PRIMARY KEY ("film_id", "file_image_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_5ce8021eb5019e7948dce1bff7" ON "films_file_images_file_image" ("film_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_3aee8f32fa9789be608606c31c" ON "films_file_images_file_image" ("file_image_id") `);
-        await queryRunner.query(`CREATE TABLE "people_species_species" ("person_id" integer NOT NULL, "species_id" integer NOT NULL, CONSTRAINT "PK_4e6b44b9698462cce59b232546e" PRIMARY KEY ("person_id", "species_id"))`);
-        await queryRunner.query(`CREATE INDEX "IDX_b2e56e637791bb0c3cc125abda" ON "people_species_species" ("person_id") `);
-        await queryRunner.query(`CREATE INDEX "IDX_d97e36a57ecd53522439ba8d4f" ON "people_species_species" ("species_id") `);
-        await queryRunner.query(`CREATE TABLE "people_public_images_public_image" ("film_id" integer NOT NULL, "public_image_id" integer NOT NULL, CONSTRAINT "PK_1c0fee93e2143074412b9ae1223" PRIMARY KEY ("film_id", "public_image_id"))`);
-        await queryRunner.query(`CREATE INDEX "IDX_142d42bcb59e825e464c22f683" ON "people_public_images_public_image" ("film_id") `);
-        await queryRunner.query(`CREATE INDEX "IDX_0cafaf0a5090196b3949f6fe12" ON "people_public_images_public_image" ("public_image_id") `);
-        await queryRunner.query(`CREATE TABLE "people_file_images_file_image" ("film_id" integer NOT NULL, "file_image_id" integer NOT NULL, CONSTRAINT "PK_6085cd3ea2a98ee9307692e8f81" PRIMARY KEY ("film_id", "file_image_id"))`);
-        await queryRunner.query(`CREATE INDEX "IDX_5506c4e6b3d320999aa96eec06" ON "people_file_images_file_image" ("film_id") `);
-        await queryRunner.query(`CREATE INDEX "IDX_b803360801b76ccac9f5f7aad7" ON "people_file_images_file_image" ("file_image_id") `);
+        await queryRunner.query(`ALTER TABLE "refresh_token" ADD CONSTRAINT "FK_8e913e288156c133999341156ad" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "species" ADD CONSTRAINT "FK_f7e93a1974cc86fd87ce6777319" FOREIGN KEY ("homeworld_id") REFERENCES "planet"("id") ON DELETE SET NULL ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "people" ADD CONSTRAINT "FK_a80a60ed539a57573be2dd1d89a" FOREIGN KEY ("homeworld_id") REFERENCES "planet"("id") ON DELETE SET NULL ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "species_public_images_public_image" ADD CONSTRAINT "FK_f0a5b7f31e759f7a6a58772f202" FOREIGN KEY ("film_id") REFERENCES "species"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
@@ -95,6 +97,12 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "vehicles_public_images_public_image" ADD CONSTRAINT "FK_f417748cafbde146cbd16c33f81" FOREIGN KEY ("public_image_id") REFERENCES "public_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "vehicles_file_images_file_image" ADD CONSTRAINT "FK_2221626b462cffa13532bb11c05" FOREIGN KEY ("film_id") REFERENCES "vehicles"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "vehicles_file_images_file_image" ADD CONSTRAINT "FK_5237330a18928d51a099c8049aa" FOREIGN KEY ("file_image_id") REFERENCES "file_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "people_species_species" ADD CONSTRAINT "FK_b2e56e637791bb0c3cc125abdaa" FOREIGN KEY ("person_id") REFERENCES "people"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "people_species_species" ADD CONSTRAINT "FK_d97e36a57ecd53522439ba8d4fe" FOREIGN KEY ("species_id") REFERENCES "species"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" ADD CONSTRAINT "FK_142d42bcb59e825e464c22f6837" FOREIGN KEY ("film_id") REFERENCES "people"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" ADD CONSTRAINT "FK_0cafaf0a5090196b3949f6fe125" FOREIGN KEY ("public_image_id") REFERENCES "public_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" ADD CONSTRAINT "FK_5506c4e6b3d320999aa96eec06a" FOREIGN KEY ("film_id") REFERENCES "people"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" ADD CONSTRAINT "FK_b803360801b76ccac9f5f7aad72" FOREIGN KEY ("file_image_id") REFERENCES "file_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "films_characters_people" ADD CONSTRAINT "FK_0c312594eabb28c7bf3a07ef6f5" FOREIGN KEY ("film_id") REFERENCES "films"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "films_characters_people" ADD CONSTRAINT "FK_6f6c60ddedf853394b1c99f0d4d" FOREIGN KEY ("character_id") REFERENCES "people"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "films_planets_planet" ADD CONSTRAINT "FK_21e38313b0b36a6f787ace5713f" FOREIGN KEY ("film_id") REFERENCES "films"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
@@ -109,21 +117,9 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "films_public_images_public_image" ADD CONSTRAINT "FK_d580e9063060c4e77db793d9ed1" FOREIGN KEY ("public_image_id") REFERENCES "public_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "films_file_images_file_image" ADD CONSTRAINT "FK_5ce8021eb5019e7948dce1bff7a" FOREIGN KEY ("film_id") REFERENCES "films"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "films_file_images_file_image" ADD CONSTRAINT "FK_3aee8f32fa9789be608606c31cc" FOREIGN KEY ("file_image_id") REFERENCES "file_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
-        await queryRunner.query(`ALTER TABLE "people_species_species" ADD CONSTRAINT "FK_b2e56e637791bb0c3cc125abdaa" FOREIGN KEY ("person_id") REFERENCES "people"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
-        await queryRunner.query(`ALTER TABLE "people_species_species" ADD CONSTRAINT "FK_d97e36a57ecd53522439ba8d4fe" FOREIGN KEY ("species_id") REFERENCES "species"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" ADD CONSTRAINT "FK_142d42bcb59e825e464c22f6837" FOREIGN KEY ("film_id") REFERENCES "people"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
-        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" ADD CONSTRAINT "FK_0cafaf0a5090196b3949f6fe125" FOREIGN KEY ("public_image_id") REFERENCES "public_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
-        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" ADD CONSTRAINT "FK_5506c4e6b3d320999aa96eec06a" FOREIGN KEY ("film_id") REFERENCES "people"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
-        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" ADD CONSTRAINT "FK_b803360801b76ccac9f5f7aad72" FOREIGN KEY ("file_image_id") REFERENCES "file_image"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" DROP CONSTRAINT "FK_b803360801b76ccac9f5f7aad72"`);
-        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" DROP CONSTRAINT "FK_5506c4e6b3d320999aa96eec06a"`);
-        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" DROP CONSTRAINT "FK_0cafaf0a5090196b3949f6fe125"`);
-        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" DROP CONSTRAINT "FK_142d42bcb59e825e464c22f6837"`);
-        await queryRunner.query(`ALTER TABLE "people_species_species" DROP CONSTRAINT "FK_d97e36a57ecd53522439ba8d4fe"`);
-        await queryRunner.query(`ALTER TABLE "people_species_species" DROP CONSTRAINT "FK_b2e56e637791bb0c3cc125abdaa"`);
         await queryRunner.query(`ALTER TABLE "films_file_images_file_image" DROP CONSTRAINT "FK_3aee8f32fa9789be608606c31cc"`);
         await queryRunner.query(`ALTER TABLE "films_file_images_file_image" DROP CONSTRAINT "FK_5ce8021eb5019e7948dce1bff7a"`);
         await queryRunner.query(`ALTER TABLE "films_public_images_public_image" DROP CONSTRAINT "FK_d580e9063060c4e77db793d9ed1"`);
@@ -138,6 +134,12 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "films_planets_planet" DROP CONSTRAINT "FK_21e38313b0b36a6f787ace5713f"`);
         await queryRunner.query(`ALTER TABLE "films_characters_people" DROP CONSTRAINT "FK_6f6c60ddedf853394b1c99f0d4d"`);
         await queryRunner.query(`ALTER TABLE "films_characters_people" DROP CONSTRAINT "FK_0c312594eabb28c7bf3a07ef6f5"`);
+        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" DROP CONSTRAINT "FK_b803360801b76ccac9f5f7aad72"`);
+        await queryRunner.query(`ALTER TABLE "people_file_images_file_image" DROP CONSTRAINT "FK_5506c4e6b3d320999aa96eec06a"`);
+        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" DROP CONSTRAINT "FK_0cafaf0a5090196b3949f6fe125"`);
+        await queryRunner.query(`ALTER TABLE "people_public_images_public_image" DROP CONSTRAINT "FK_142d42bcb59e825e464c22f6837"`);
+        await queryRunner.query(`ALTER TABLE "people_species_species" DROP CONSTRAINT "FK_d97e36a57ecd53522439ba8d4fe"`);
+        await queryRunner.query(`ALTER TABLE "people_species_species" DROP CONSTRAINT "FK_b2e56e637791bb0c3cc125abdaa"`);
         await queryRunner.query(`ALTER TABLE "vehicles_file_images_file_image" DROP CONSTRAINT "FK_5237330a18928d51a099c8049aa"`);
         await queryRunner.query(`ALTER TABLE "vehicles_file_images_file_image" DROP CONSTRAINT "FK_2221626b462cffa13532bb11c05"`);
         await queryRunner.query(`ALTER TABLE "vehicles_public_images_public_image" DROP CONSTRAINT "FK_f417748cafbde146cbd16c33f81"`);
@@ -160,15 +162,7 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "species_public_images_public_image" DROP CONSTRAINT "FK_f0a5b7f31e759f7a6a58772f202"`);
         await queryRunner.query(`ALTER TABLE "people" DROP CONSTRAINT "FK_a80a60ed539a57573be2dd1d89a"`);
         await queryRunner.query(`ALTER TABLE "species" DROP CONSTRAINT "FK_f7e93a1974cc86fd87ce6777319"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_b803360801b76ccac9f5f7aad7"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_5506c4e6b3d320999aa96eec06"`);
-        await queryRunner.query(`DROP TABLE "people_file_images_file_image"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_0cafaf0a5090196b3949f6fe12"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_142d42bcb59e825e464c22f683"`);
-        await queryRunner.query(`DROP TABLE "people_public_images_public_image"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_d97e36a57ecd53522439ba8d4f"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_b2e56e637791bb0c3cc125abda"`);
-        await queryRunner.query(`DROP TABLE "people_species_species"`);
+        await queryRunner.query(`ALTER TABLE "refresh_token" DROP CONSTRAINT "FK_8e913e288156c133999341156ad"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_3aee8f32fa9789be608606c31c"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_5ce8021eb5019e7948dce1bff7"`);
         await queryRunner.query(`DROP TABLE "films_file_images_file_image"`);
@@ -190,6 +184,15 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_6f6c60ddedf853394b1c99f0d4"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_0c312594eabb28c7bf3a07ef6f"`);
         await queryRunner.query(`DROP TABLE "films_characters_people"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_b803360801b76ccac9f5f7aad7"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_5506c4e6b3d320999aa96eec06"`);
+        await queryRunner.query(`DROP TABLE "people_file_images_file_image"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_0cafaf0a5090196b3949f6fe12"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_142d42bcb59e825e464c22f683"`);
+        await queryRunner.query(`DROP TABLE "people_public_images_public_image"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_d97e36a57ecd53522439ba8d4f"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_b2e56e637791bb0c3cc125abda"`);
+        await queryRunner.query(`DROP TABLE "people_species_species"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_5237330a18928d51a099c8049a"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_2221626b462cffa13532bb11c0"`);
         await queryRunner.query(`DROP TABLE "vehicles_file_images_file_image"`);
@@ -220,15 +223,16 @@ export class generated1675862282261 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_8542c2cb80cd87ed017de247b4"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_f0a5b7f31e759f7a6a58772f20"`);
         await queryRunner.query(`DROP TABLE "species_public_images_public_image"`);
-        await queryRunner.query(`DROP TABLE "users"`);
-        await queryRunner.query(`DROP TABLE "people"`);
         await queryRunner.query(`DROP TABLE "films"`);
+        await queryRunner.query(`DROP TABLE "people"`);
         await queryRunner.query(`DROP TABLE "vehicles"`);
         await queryRunner.query(`DROP TABLE "starships"`);
         await queryRunner.query(`DROP TABLE "planet"`);
         await queryRunner.query(`DROP TABLE "species"`);
         await queryRunner.query(`DROP TABLE "public_image"`);
         await queryRunner.query(`DROP TABLE "file_image"`);
+        await queryRunner.query(`DROP TABLE "refresh_token"`);
+        await queryRunner.query(`DROP TABLE "users"`);
     }
 
 }

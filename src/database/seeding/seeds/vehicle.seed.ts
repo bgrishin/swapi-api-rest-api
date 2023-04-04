@@ -22,7 +22,7 @@ export default class VehiclesSeed implements Seeder {
         .insert()
         .into(Vehicles)
         .values(
-          data.map((x, i) => {
+          data.map((x) => {
             const { created, edited, url, ...entity } = x;
             dataCopy.push({ ...entity, url, id });
             id++;

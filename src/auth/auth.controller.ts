@@ -20,6 +20,7 @@ import { CreateUserDto } from '../swapi/user/dto/create-user.dto';
 import { Users } from '../swapi/user/user.entity';
 import { AuthService } from './auth.service';
 import { JwtTokenDto } from './dto/jwt-token.dto';
+import { LogoutDto } from './dto/logout.dto';
 import { InfoDto } from './dto/profile-info.dto';
 import { AccessJwtAuthGuard } from './guards/access.jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -46,7 +47,7 @@ export class AuthController {
   @ApiResponse({ status: 201, type: InfoDto })
   signup(
     @Body(new ValidationPipe()) userDto: CreateUserDto,
-  ): Promise<Omit<Users, 'password' | 'refreshToken'>> {
+  ): Promise<Omit<Users, 'password' | 'refreshTokens'>> {
     return this.authService.register(userDto);
   }
 
@@ -68,6 +69,7 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
+  @ApiOkResponse({ type: JwtTokenDto })
   @UseGuards(RefreshTokenGuard)
   @Put('refresh')
   refreshTokens(@User() { id, refreshToken }) {
@@ -75,9 +77,10 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccessJwtAuthGuard)
+  @ApiOkResponse({ type: LogoutDto })
+  @UseGuards(RefreshTokenGuard)
   @Get('logout')
-  logout(@User() { id }) {
-    return this.authService.logout(id);
+  logout(@User() { refreshToken }) {
+    return this.authService.logout(refreshToken);
   }
 }

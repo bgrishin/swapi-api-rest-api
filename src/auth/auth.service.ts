@@ -9,7 +9,7 @@ import { compare, genSalt, hash } from 'bcrypt';
 import { CreateUserDto } from '../swapi/user/dto/create-user.dto';
 import { Users } from '../swapi/user/user.entity';
 import { UserService } from '../swapi/user/user.service';
-import { UserJwtPayload } from './dto/user-jwt-payload.dto';
+import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { Roles } from './types/role.enum';
 
 @Injectable()
@@ -17,6 +17,7 @@ export class AuthService {
   constructor(
     private _usersService: UserService,
     private _configService: ConfigService,
+    private _refreshTokenService: RefreshTokenService,
     private _jwtService: JwtService,
   ) {}
 
@@ -35,19 +36,14 @@ export class AuthService {
   }
 
   async login(user: Users) {
-    const payload = {
-      username: user.username,
-      roles: user.roles,
-      sub: user.id,
-    };
-    const tokens = await this.getJwtTokens(payload);
-    await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return tokens;
+    const { accessToken, refreshToken } = await this.getJwtTokens(user);
+    await this._refreshTokenService.saveRefreshToken(refreshToken, user);
+    return { accessToken, refreshToken };
   }
 
   async register(
     userDto: CreateUserDto,
-  ): Promise<Omit<Users, 'password' | 'refreshToken'>> {
+  ): Promise<Omit<Users, 'password' | 'refreshTokens'>> {
     const user = await this._usersService.findOneByUsername(
       userDto.username,
       false,
@@ -55,13 +51,16 @@ export class AuthService {
     if (user) throw new BadRequestException('User is already exists');
     return this.hashData(userDto.password).then(async (hash) => {
       const user = await this._usersService.createUser(userDto.username, hash);
-      const { password, refreshToken, ...result } = user;
+      const { password, refreshTokens, ...result } = user;
       return result;
     });
   }
 
-  async logout(id: number) {
-    return this._usersService.updateOne(id, { refreshToken: null });
+  async logout(refreshToken: string) {
+    const logout = await this._refreshTokenService.removeRefreshToken(
+      refreshToken,
+    );
+    return { token: refreshToken, logout };
   }
 
   async addAdmin(username: string): Promise<Omit<Users, 'password'>> {
@@ -72,23 +71,18 @@ export class AuthService {
     return result;
   }
 
-  async updateRefreshToken(id: number, refreshToken: string) {
-    const hashedRefreshToken = await this.hashData(refreshToken);
-    await this._usersService.updateOne(id, {
-      refreshToken: hashedRefreshToken,
-    });
-  }
-
-  async getJwtTokens(payload: UserJwtPayload) {
+  async getJwtTokens(user: Users) {
+    const accessTokenPayload = {
+      username: user.username,
+      roles: user.roles,
+      userId: user.id,
+    };
     const [accessToken, refreshToken] = await Promise.all([
-      this._jwtService.signAsync(payload, {
+      this._jwtService.signAsync(accessTokenPayload, {
         secret: this._configService.get<string>('ACCESS_JWT_SECRET'),
         expiresIn: '30m',
       }),
-      this._jwtService.signAsync(payload, {
-        secret: this._configService.get<string>('REFRESH_JWT_SECRET'),
-        expiresIn: '7d',
-      }),
+      this._refreshTokenService.generateRefreshToken(user),
     ]);
 
     return {
@@ -99,17 +93,16 @@ export class AuthService {
 
   async refreshTokens(id: string, refreshToken: string) {
     const user = await this._usersService.findOneById(+id);
-    if (!user || !user.refreshToken)
+    if (!user || !user.refreshTokens.length)
       throw new ForbiddenException('Access Denied');
-    const refreshTokenMatches = await compare(refreshToken, user.refreshToken);
+    const refreshTokenMatches = this._refreshTokenService.compareRefreshTokens(
+      refreshToken,
+      user.refreshTokens.map(({ token }) => token),
+    );
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
-    const payload = {
-      username: user.username,
-      roles: user.roles,
-      sub: user.id,
-    };
-    const tokens = await this.getJwtTokens(payload);
-    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    const tokens = await this.getJwtTokens(user);
+    await this._refreshTokenService.saveRefreshToken(tokens.refreshToken, user);
+    await this._refreshTokenService.removeRefreshToken(refreshToken);
     return tokens;
   }
 

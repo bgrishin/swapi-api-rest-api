@@ -21,7 +21,7 @@ export default class StarshipsSeed implements Seeder {
         .insert()
         .into(Starships)
         .values(
-          data.map((x, i) => {
+          data.map((x) => {
             const { created, edited, url, ...entity } = x;
             dataCopy.push({ ...entity, url, id });
             id++;

@@ -9,5 +9,5 @@ export class UserJwtPayload {
   roles: Roles[] | Roles;
 
   @ApiProperty({ example: '123' })
-  sub: number;
+  userId: number;
 }
