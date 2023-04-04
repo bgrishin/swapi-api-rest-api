@@ -41,7 +41,7 @@ AWS_PUBLIC_BUCKET_NAME=
 
 7. Run the migrations to create the database tables:
 
-   `npm run migration:run`
+   `npm run migration:up`
 8. Run the seeders to fill the database with data from swapi.dev:
 
    `npm run seed:run`
