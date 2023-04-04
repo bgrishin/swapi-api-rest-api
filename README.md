@@ -13,7 +13,7 @@ Our project works very simply, it takes data from [swapi](https://swapi.dev/"swa
 
 2. Enter in the directory with project and run next command to install dependencies:
 
-   `npm install --force
+   `npm install --force`
 
 3. Make an .env file from the .env.example file:
 
