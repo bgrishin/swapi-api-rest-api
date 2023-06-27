@@ -9,7 +9,7 @@ Our project works very simply, it takes data from [swapi](https://swapi.dev/"swa
 ### How to launch the project? 🚀
 1. Clone a repository:
 
-   `git clone https://github.com/shavlenkov/star_wars.git`
+   `git clone https://github.com/BOGDAN-GRISHIN/swapi-api-rest-api.git`
 
 2. Enter in the directory with project and run next command to install dependencies:
 
