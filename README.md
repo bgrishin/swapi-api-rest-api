@@ -38,3 +38,5 @@ AWS_PUBLIC_BUCKET_NAME=
 
    `docker-compose up --build -d`
 5. Open the browser, go to the address: http://127.0.0.1:3000/api or http://localhost:3000/api and you will see the swagger documentation. Enjoy! 🔮
+
+*6: To stop the server write `docker-compose stop`
