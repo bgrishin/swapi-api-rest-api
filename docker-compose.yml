@@ -6,6 +6,8 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
     networks:
       - main-network
 
@@ -20,7 +22,9 @@ services:
       - db
     networks:
       - main-network
+    command: sh -c "npm run migration:up ; npm run seed:run ; npm start"
 
 networks:
   main-network:
     driver: bridge
+

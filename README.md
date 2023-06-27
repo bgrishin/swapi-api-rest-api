@@ -11,14 +11,10 @@ Our project works very simply, it takes data from [swapi](https://swapi.dev/"swa
 
    `git clone https://github.com/BOGDAN-GRISHIN/swapi-api-rest-api.git`
 
-2. Enter in the directory with project and run next command to install dependencies:
-
-   `npm install --force`
-
-3. Make an .env file from the .env.example file:
+2. Make an .env file from the .env.example file:
 
    `cp .env.example .env`
-4. Make the necessary configuration changes to the .env file:
+3. Make the necessary configuration changes to the .env file:
 ```
 DB_USER=
 DB_NAME=
@@ -38,14 +34,7 @@ AWS_SECRET_ACCESS_KEY=
 AWS_PUBLIC_BUCKET_NAME=
 
 ```
+4. Build and run docker containers in the background (if you don't have docker it's time to install it 😉)
 
-7. Run the migrations to create the database tables:
-
-   `npm run migration:up`
-8. Run the seeders to fill the database with data from swapi.dev:
-
-   `npm run seed:run`
-9. Finnaly run the program:
-
-   `npm run start:dev`
-10. Open the browser, go to the address: http://127.0.0.1:3000/api or http://localhost:3000/api and you will see the swagger documentation. Enjoy! 🔮
+   `docker-compose up --build -d`
+5. Open the browser, go to the address: http://127.0.0.1:3000/api or http://localhost:3000/api and you will see the swagger documentation. Enjoy! 🔮
