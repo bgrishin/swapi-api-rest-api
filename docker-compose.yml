@@ -22,7 +22,7 @@ services:
       - db
     networks:
       - main-network
-    command: sh -c "npm run migration:up ; npm run seed:run ; npm start"
+    command: sh -c "if [ ! -f ./initialized.txt ]; then npm run migration:up ; npm run seed:run ; touch initialized.txt ; fi; npm start"
 
 networks:
   main-network:
