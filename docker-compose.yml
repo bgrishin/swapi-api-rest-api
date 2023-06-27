@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - main-network
+
+  server:
+    container_name: server
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    networks:
+      - main-network
+
+networks:
+  main-network:
+    driver: bridge
