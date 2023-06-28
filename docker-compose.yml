@@ -13,9 +13,7 @@ services:
 
   server:
     container_name: server
-    build: .
-    environment:
-      - NODE_OPTIONS=--max_old_space_size=4096  
+    build: .  
     env_file:
       - .env
     ports:
@@ -24,7 +22,7 @@ services:
       - db
     networks:
       - main-network
-    command: sh -c "if [ ! -f ./initialized.txt ]; then npm run migration:up ; npm run seed:run ; touch initialized.txt ; fi; npm start"
+    command: sh -c "if [ ! -f ./initialized.txt ]; then npm run migration:up ; npm run seed:run ; touch initialized.txt ; fi; NODE_OPTIONS="--max-old-space-size=8192" npm start"
 
 networks:
   main-network:
