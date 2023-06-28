@@ -8,6 +8,7 @@ RUN npm install --force
 
 COPY ./ ./
 
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=8192" npm run build
+
 
 EXPOSE 3000
