@@ -37,6 +37,6 @@ AWS_PUBLIC_BUCKET_NAME=
 4. Build and run docker containers in the background (if you don't have docker it's time to install it 😉)
 
    `docker-compose up --build -d`
-5. Open the browser, go to the address: http://127.0.0.1:3000/api or http://localhost:3000/api and you will see the swagger documentation. Enjoy! 🔮
+5. Wait from 5 to 10 minutes to migrations and seeds complete, and then open the browser, go to the address: http://127.0.0.1:3000/api or http://localhost:3000/api and you will see the swagger documentation. Enjoy! 🔮
 
 *6: To stop the server write `docker-compose stop`
